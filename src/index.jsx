@@ -1,12 +1,9 @@
 import { ChakraProvider, ColorModeScript, extendTheme } from '@chakra-ui/react'
-import { createBreakpoints } from '@chakra-ui/theme-tools'
-import { withAITracking } from '@microsoft/applicationinsights-react-js'
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { BrowserRouter, Switch, Redirect, Route } from 'react-router-dom'
 
-import { reactPlugin } from './appInsights'
 import AppFooter from './components/AppFooter'
 import AppVersion from './components/AppVersion'
 import KickstarterArchives from './kickstarter-archives'
@@ -21,13 +18,13 @@ const queryClient = new QueryClient()
 const config = {
   initialColorMode: 'light',
   useSystemColorMode: false,
-  breakpoints: createBreakpoints({
+  breakpoints: {
     sm: '724px', // 2 columns
     md: '1064px', // 3 columns
     lg: '1404px', // 4 columns
     xl: '1744px', // 5 columns
     '2xl': '2084px', // 6 columns
-  }),
+  },
   components: {
     Container: {
       baseStyle: {
@@ -54,8 +51,9 @@ const config = {
 }
 const theme = extendTheme(config)
 
-const AppConfiguration = withAITracking(reactPlugin, () => (
-  <>
+const root = createRoot(document.getElementById('root'))
+root.render(
+  <React.StrictMode>
     <ColorModeScript initialColorMode={theme.config.initialColorMode} />
     <QueryClientProvider client={queryClient}>
       <ChakraProvider resetCSS={true} theme={theme}>
@@ -79,14 +77,7 @@ const AppConfiguration = withAITracking(reactPlugin, () => (
         </BrowserRouter>
       </ChakraProvider>
     </QueryClientProvider>
-  </>
-))
-
-ReactDOM.render(
-  <React.StrictMode>
-    <AppConfiguration />
   </React.StrictMode>,
-  document.getElementById('root')
 )
 
 // If you want your app to work offline and load faster, you can change

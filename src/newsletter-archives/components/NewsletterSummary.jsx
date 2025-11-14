@@ -33,7 +33,7 @@ const searchPreview = (text, searchMatches, textColor) => {
     const postMatchEndIndex = Math.min(match[1] + 300, text.length - 1)
 
     return (
-      <Text key={match[0]} color={textColor} isTruncated>
+      <Text key={match[0]} color={textColor} noOfLines={1}>
         {preMatchStartIndex > 0 ? '...' : ''}
         {text.substring(preMatchStartIndex, matchStartIndex)}
         <b>{text.substring(matchStartIndex, matchEndIndex)}</b>

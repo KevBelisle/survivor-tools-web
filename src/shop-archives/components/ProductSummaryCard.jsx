@@ -61,7 +61,7 @@ const ProductSummaryCard = ({ product }) => {
         <Box
           width="320px"
           height={`${Math.round(
-            (320 * product.image.height) / product.image.width
+            (320 * product.image.height) / product.image.width,
           )}px`}
           backgroundImage={
             hasBeenInViewport
