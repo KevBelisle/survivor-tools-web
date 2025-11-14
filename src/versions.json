@@ -1,0 +1,90 @@
+[
+    {
+        "version": "0.01",
+        "releaseNotes": "First public alpha release."
+    },
+    {
+        "version": "0.02",
+        "releaseNotes": "Now with custom domain and SSL. Under the hood, switched from redux to react-query. First draft of a mobile-friendly UI."
+    },
+    {
+        "version": "0.03",
+        "releaseNotes": "Masonry layout test."
+    },
+    {
+        "version": "0.04",
+        "releaseNotes": "Masonry layout test."
+    },
+    {
+        "version": "0.05",
+        "releaseNotes": "Added search. Customized breakpoints."
+    },
+    {
+        "version": "0.06",
+        "releaseNotes": "Fixed search bug. Added In Stock, Out of Stock and Unlisted labels. Added versions info."
+    },
+    {
+        "version": "0.07",
+        "releaseNotes": "Improve product list loading view."
+    },
+    {
+        "version": "0.07",
+        "releaseNotes": "Rework product details page."
+    },
+    {
+        "version": "0.08",
+        "releaseNotes": "Add charts!"
+    },
+    {
+        "version": "0.09",
+        "releaseNotes": "Add filters for types and tags!"
+    },
+    {
+        "version": "0.10",
+        "releaseNotes": "Add lightbox for images!"
+    },
+    {
+        "version": "0.11",
+        "releaseNotes": "Add back link to header. Add min/max price display. Show \"Unlisted\" instead of stock on details page."
+    },
+    {
+        "version": "0.12",
+        "releaseNotes": "Add previous/next links to product details page."
+    },
+    {
+        "version": "0.13",
+        "releaseNotes": "Prefetch previous/next products in product details page. Lazy load images in product list page."
+    },
+    {
+        "version": "0.13",
+        "releaseNotes": "Prefetch previous/next products in product details page. Lazy load images in product list page."
+    },
+    {
+        "version": "0.14",
+        "releaseNotes": "Add feedback link to header. Add new, temporary, favicon."
+    },
+    {
+        "version": "0.15",
+        "releaseNotes": "Beta of newsletter archives at archives.survivor.tools/newsletter"
+    },
+    {
+        "version": "0.16",
+        "releaseNotes": "Timeline view for newsletter list."
+    },
+    {
+        "version": "0.17",
+        "releaseNotes": "Beta of Kickstarter archives at archives.survivor.tools/kickstarter"
+    },
+    {
+        "version": "0.18",
+        "releaseNotes": "Added scroll to top button to footer. Improvement to KS update display."
+    },
+    {
+        "version": "0.19",
+        "releaseNotes": "Search for KS updates - including text in images!"
+    },
+    {
+        "version": "0.20",
+        "releaseNotes": "Filter products by in stock, out of stock and unlisted. Link to shop on product pages."
+    }
+]
