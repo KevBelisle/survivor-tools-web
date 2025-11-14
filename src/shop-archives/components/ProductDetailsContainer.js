@@ -5,13 +5,13 @@ import {
   Icon,
   useBreakpointValue,
 } from '@chakra-ui/react'
-import axios from 'axios'
 import React, { useMemo } from 'react'
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi'
 import { useQuery, useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
 import SimpleReactLightbox from 'simple-react-lightbox'
 
+import api from '../../services/api'
 import ProductDetails from './ProductDetails'
 import ProductDetailsSkeleton from './ProductDetailsSkeleton'
 
@@ -19,9 +19,7 @@ const fetchProduct = async (productId) => {
   if (!productId) {
     return null
   }
-  const { data } = await axios.get(
-    `https://api.survivor.tools/products/${productId}`
-  )
+  const { data } = await api.get(`/products/${productId}`)
   return data
 }
 
@@ -35,7 +33,7 @@ function ProductDetailsContainer({ productId, filteredProducts }) {
 
   const [prevProduct, nextProduct] = useMemo(() => {
     const index = filteredProducts.findIndex(
-      (product) => product.id === productId
+      (product) => product.id === productId,
     )
     return [
       filteredProducts[
@@ -50,10 +48,10 @@ function ProductDetailsContainer({ productId, filteredProducts }) {
   const showNextPrevLabels = useBreakpointValue({ base: false, md: true })
 
   useQueryClient().prefetchQuery(['product', prevProduct?.id], () =>
-    fetchProduct(prevProduct?.id)
+    fetchProduct(prevProduct?.id),
   )
   useQueryClient().prefetchQuery(['product', nextProduct?.id], () =>
-    fetchProduct(nextProduct?.id)
+    fetchProduct(nextProduct?.id),
   )
 
   return (

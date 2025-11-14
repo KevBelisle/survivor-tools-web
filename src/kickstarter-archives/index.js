@@ -1,5 +1,4 @@
 import { HStack, Icon, Text } from '@chakra-ui/react'
-import axios from 'axios'
 import Fuse from 'fuse.js'
 import React, { useEffect, useMemo, useReducer, useState } from 'react'
 import { HiArrowNarrowLeft, HiOutlineViewList } from 'react-icons/hi'
@@ -7,6 +6,7 @@ import { useQuery } from 'react-query'
 import { Switch, Route, useRouteMatch } from 'react-router-dom'
 
 import AppHeader from '../components/AppHeader'
+import api from '../services/api'
 import UpdateDetails from './components/UpdateDetails'
 import UpdateList from './components/UpdateList'
 import UpdateListSearch from './components/UpdateListSearch'
@@ -21,9 +21,7 @@ const KickstarterArchives = () => {
   const { isLoading, isError, data, error } = useQuery(
     'updateList',
     async () => {
-      const { data } = await axios.get(
-        'https://api.survivor.tools/kickstarter-updates'
-      )
+      const { data } = await api.get('/kickstarter-updates')
       return data
     },
     {
@@ -39,7 +37,7 @@ const KickstarterArchives = () => {
             keys: ['text'],
           }),
         }),
-        []
+        [],
       ),
       initialData: {
         updates: [],
@@ -48,7 +46,7 @@ const KickstarterArchives = () => {
           keys: ['text'],
         }),
       },
-    }
+    },
   )
 
   window.fuse = data.fuse

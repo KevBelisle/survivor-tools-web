@@ -1,5 +1,4 @@
 import { HStack, Icon, Text } from '@chakra-ui/react'
-import axios from 'axios'
 import Fuse from 'fuse.js'
 import React, { useEffect, useMemo, useState } from 'react'
 import { HiArrowNarrowLeft, HiOutlineViewList } from 'react-icons/hi'
@@ -7,6 +6,7 @@ import { useQuery } from 'react-query'
 import { Switch, Route, useRouteMatch } from 'react-router-dom'
 
 import AppHeader from '../components/AppHeader'
+import api from '../services/api'
 import NewsletterDetails from './components/NewsletterDetails'
 import NewsletterList from './components/NewsletterList'
 import NewsletterListSearch from './components/NewsletterListSearch'
@@ -21,7 +21,7 @@ const NewsletterArchives = () => {
   const { isLoading, isError, data, error } = useQuery(
     'newsletterList',
     async () => {
-      const { data } = await axios.get('https://api.survivor.tools/newsletters')
+      const { data } = await api.get('/newsletters')
       return data
     },
     {
@@ -37,7 +37,7 @@ const NewsletterArchives = () => {
             keys: ['text'],
           }),
         }),
-        []
+        [],
       ),
       initialData: {
         newsletters: [],
@@ -46,7 +46,7 @@ const NewsletterArchives = () => {
           keys: ['text'],
         }),
       },
-    }
+    },
   )
 
   window.fuse = data.fuse

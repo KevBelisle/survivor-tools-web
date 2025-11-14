@@ -1,5 +1,4 @@
 import { HStack, Icon, Text } from '@chakra-ui/react'
-import axios from 'axios'
 import Fuse from 'fuse.js'
 import React, { useEffect, useMemo, useReducer, useState } from 'react'
 import { HiArrowNarrowLeft, HiOutlineViewGrid } from 'react-icons/hi'
@@ -7,6 +6,7 @@ import { useQuery } from 'react-query'
 import { Switch, Route, useRouteMatch } from 'react-router-dom'
 
 import AppHeader from '../components/AppHeader'
+import api from '../services/api'
 import ProductDetailsContainer from './components/ProductDetailsContainer'
 import ProductList from './components/ProductList'
 
@@ -20,7 +20,7 @@ const ShopArchives = () => {
   const { isLoading, isError, data, error } = useQuery(
     'productList',
     async () => {
-      const { data } = await axios.get('https://api.survivor.tools/products')
+      const { data } = await api.get('/products')
       return data
     },
     {
@@ -61,7 +61,7 @@ const ShopArchives = () => {
             return states
           }, {}),
         }),
-        []
+        [],
       ),
       initialData: {
         products: [],
@@ -73,7 +73,7 @@ const ShopArchives = () => {
         types: [],
         states: [],
       },
-    }
+    },
   )
 
   const [searchTerm, setSearchTerm] = useState('')
@@ -100,7 +100,7 @@ const ShopArchives = () => {
         return newState
       }
     },
-    {}
+    {},
   )
 
   const [stateFilters, dispatchStateFilterChange] = useReducer(
@@ -114,7 +114,7 @@ const ShopArchives = () => {
         return newState
       }
     },
-    {}
+    {},
   )
 
   const filteredProducts = useMemo(() => {
@@ -130,9 +130,9 @@ const ShopArchives = () => {
         ? titleMatches.filter(
             (product) =>
               product.currentTags.some(
-                (tag) => tagFilters[tag.toLowerCase()]
+                (tag) => tagFilters[tag.toLowerCase()],
               ) ||
-              product.previousTags.some((tag) => tagFilters[tag.toLowerCase()])
+              product.previousTags.some((tag) => tagFilters[tag.toLowerCase()]),
           )
         : titleMatches
     const typesMatch =
@@ -142,7 +142,7 @@ const ShopArchives = () => {
     const statesMatch =
       Object.values(stateFilters).filter((x) => x).length > 0
         ? typesMatch.filter(
-            (product) => stateFilters[product.state.toLowerCase()]
+            (product) => stateFilters[product.state.toLowerCase()],
           )
         : typesMatch
     return statesMatch

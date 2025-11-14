@@ -10,11 +10,12 @@ import {
   useBreakpointValue,
   VStack,
 } from '@chakra-ui/react'
-import axios from 'axios'
 import React, { useMemo } from 'react'
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi'
 import { useQuery, useQueryClient } from 'react-query'
 import { Link, useRouteMatch } from 'react-router-dom'
+
+import api from '../../services/api'
 
 const NewsletterDetails = ({ newsletterId, filteredNewsletters }) => {
   const {
@@ -23,9 +24,7 @@ const NewsletterDetails = ({ newsletterId, filteredNewsletters }) => {
     data: newsletter,
     error,
   } = useQuery(['newsletter', newsletterId], async () => {
-    const { data } = await axios.get(
-      `https://api.survivor.tools/newsletter/${newsletterId}`
-    )
+    const { data } = await api.get(`/newsletter/${newsletterId}`)
     return data
   })
 
@@ -35,7 +34,7 @@ const NewsletterDetails = ({ newsletterId, filteredNewsletters }) => {
 
   const [prevNewsletter, nextNewsletter] = useMemo(() => {
     const index = filteredNewsletters.findIndex(
-      (newsletter) => newsletter.item.id === newsletterId
+      (newsletter) => newsletter.item.id === newsletterId,
     )
     const next = index - 1 >= 0 ? filteredNewsletters[index - 1]?.item : null
     const prev =
