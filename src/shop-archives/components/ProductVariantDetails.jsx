@@ -4,10 +4,6 @@ import {
   HStack,
   Icon,
   Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverBody,
   SimpleGrid,
   Stat,
   Tag,
@@ -81,8 +77,8 @@ const ProductVariantDetails = ({ variant, listed }) => {
                 {maxPrice === minPrice ? (
                   <></>
                 ) : (
-                  <Popover placement="right">
-                    <PopoverTrigger>
+                  <Popover.Root positioning={{ placement: "right" }}>
+                    <Popover.Trigger asChild>
                       <Text lineHeight={6}>
                         <Icon
                           as={HiInformationCircle}
@@ -92,19 +88,21 @@ const ProductVariantDetails = ({ variant, listed }) => {
                           ml={1}
                         />
                       </Text>
-                    </PopoverTrigger>
-                    <PopoverContent width="auto">
-                      <PopoverArrow />
-                      <PopoverBody>
-                        <Text fontSize="sm" fontWeight="normal">
-                          Highest: {maxPrice}
-                        </Text>
-                        <Text fontSize="sm" fontWeight="normal">
-                          Lowest: {minPrice}
-                        </Text>
-                      </PopoverBody>
-                    </PopoverContent>
-                  </Popover>
+                    </Popover.Trigger>
+                    <Popover.Positioner>
+                      <Popover.Content width="auto">
+                        <Popover.Arrow />
+                        <Popover.Body>
+                          <Text fontSize="sm" fontWeight="normal">
+                            Highest: {maxPrice}
+                          </Text>
+                          <Text fontSize="sm" fontWeight="normal">
+                            Lowest: {minPrice}
+                          </Text>
+                        </Popover.Body>
+                      </Popover.Content>
+                    </Popover.Positioner>
+                  </Popover.Root>
                 )}
               </HStack>
             </Stat.ValueText>

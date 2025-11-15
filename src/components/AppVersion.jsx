@@ -3,11 +3,6 @@ import {
   List,
   Text,
   Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
   useBreakpointValue,
 } from '@chakra-ui/react'
 import React from 'react'
@@ -32,38 +27,40 @@ const AppVersion = () => (
           bottom="0"
           left="0"
         >
-          <Popover placement="top-start">
-            <PopoverTrigger p="0">
-              <Text fontSize="xs" opacity="0.5" cursor="pointer">
+          <Popover.Root positioning={{ placement: "top-start" }}>
+            <Popover.Trigger asChild>
+              <Text fontSize="xs" opacity="0.5" cursor="pointer" p="0">
                 v{versions[versions.length - 1].version}
               </Text>
-            </PopoverTrigger>
-            <PopoverContent>
-              <PopoverHeader fontWeight="semibold" fontSize="sm">
-                survival.tools Shop Archive
-              </PopoverHeader>
-              <PopoverArrow />
-              <PopoverBody fontSize="sm" maxHeight="14em" overflowY="scroll">
-                <List.Root>
-                  {versions
-                    .slice(0)
-                    .reverse()
-                    .map((x, i) => (
-                      <List.Item key={i}>
-                        <Text
-                          display="inline"
-                          paddingRight="2"
-                          fontWeight="semibold"
-                        >
-                          v{x.version}
-                        </Text>
-                        <Text display="inline">{x.releaseNotes}</Text>
-                      </List.Item>
-                    ))}
-                </List.Root>
-              </PopoverBody>
-            </PopoverContent>
-          </Popover>
+            </Popover.Trigger>
+            <Popover.Positioner>
+              <Popover.Content>
+                <Popover.Header fontWeight="semibold" fontSize="sm">
+                  survival.tools Shop Archive
+                </Popover.Header>
+                <Popover.Arrow />
+                <Popover.Body fontSize="sm" maxHeight="14em" overflowY="scroll">
+                  <List.Root>
+                    {versions
+                      .slice(0)
+                      .reverse()
+                      .map((x, i) => (
+                        <List.Item key={i}>
+                          <Text
+                            display="inline"
+                            paddingRight="2"
+                            fontWeight="semibold"
+                          >
+                            v{x.version}
+                          </Text>
+                          <Text display="inline">{x.releaseNotes}</Text>
+                        </List.Item>
+                      ))}
+                  </List.Root>
+                </Popover.Body>
+              </Popover.Content>
+            </Popover.Positioner>
+          </Popover.Root>
         </Box>
       ),
     })}
