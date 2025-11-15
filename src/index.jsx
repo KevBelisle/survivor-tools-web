@@ -1,8 +1,8 @@
 import { ChakraProvider, ColorModeScript, extendTheme } from '@chakra-ui/react'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { BrowserRouter, Switch, Redirect, Route } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { BrowserRouter, Routes, Navigate, Route } from 'react-router-dom'
 
 import AppFooter from './components/AppFooter'
 import AppVersion from './components/AppVersion'
@@ -58,20 +58,12 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <ChakraProvider resetCSS={true} theme={theme}>
         <BrowserRouter>
-          <Switch>
-            <Route path="/newsletter">
-              <NewsletterArchives />
-            </Route>
-            <Route path="/kickstarter">
-              <KickstarterArchives />
-            </Route>
-            <Route path="/shop">
-              <ShopArchives />
-            </Route>
-            <Route>
-              <Redirect to="/shop" />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route path="/newsletter/*" element={<NewsletterArchives />} />
+            <Route path="/kickstarter/*" element={<KickstarterArchives />} />
+            <Route path="/shop/*" element={<ShopArchives />} />
+            <Route path="/" element={<Navigate to="/shop" replace />} />
+          </Routes>
           <AppFooter />
           <AppVersion />
         </BrowserRouter>

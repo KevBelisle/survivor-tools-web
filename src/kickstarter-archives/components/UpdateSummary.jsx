@@ -1,6 +1,6 @@
 import { Box, Text, useColorModeValue, VStack } from '@chakra-ui/react'
 import React from 'react'
-import { Link, useRouteMatch } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 const skipTo = ['View it in your browser.', 'View this email in your browser']
 
@@ -45,7 +45,6 @@ const searchPreview = (text, searchMatches, textColor) => {
 }
 
 const UpdateSummary = ({ update, searchMatches, includeDate, ...props }) => {
-  const { path, url } = useRouteMatch()
 
   const textColor = useColorModeValue('gray.400', 'gray.400')
 
@@ -68,7 +67,7 @@ const UpdateSummary = ({ update, searchMatches, includeDate, ...props }) => {
       mb="20px"
       {...props}
     >
-      <Link to={`${url}/${update.id}`}>
+      <Link to={`./${update.id}`}>
         <Box py="2" px="4" bg={useColorModeValue('white', 'gray.800')}>
           <VStack alignItems="flex-start">
             {includeDate ? date : <></>}

@@ -7,9 +7,8 @@ import {
 } from '@chakra-ui/react'
 import React, { useMemo } from 'react'
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi'
-import { useQuery, useQueryClient } from 'react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import SimpleReactLightbox from 'simple-react-lightbox'
 
 import api from '../../services/api'
 import ProductDetails from './ProductDetails'
@@ -88,15 +87,13 @@ function ProductDetailsContainer({ productId, filteredProducts }) {
           <></>
         )}
       </Flex>
-      <SimpleReactLightbox>
-        {isLoading ? (
-          <ProductDetailsSkeleton />
-        ) : isError ? (
-          <span>Error: {error.message}</span>
-        ) : (
-          <ProductDetails product={product} />
-        )}
-      </SimpleReactLightbox>
+      {isLoading ? (
+        <ProductDetailsSkeleton />
+      ) : isError ? (
+        <span>Error: {error.message}</span>
+      ) : (
+        <ProductDetails product={product} />
+      )}
     </Container>
   )
 }

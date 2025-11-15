@@ -2,8 +2,8 @@ import { HStack, Icon, Text } from '@chakra-ui/react'
 import Fuse from 'fuse.js'
 import React, { useEffect, useMemo, useReducer, useState } from 'react'
 import { HiArrowNarrowLeft, HiOutlineViewGrid } from 'react-icons/hi'
-import { useQuery } from 'react-query'
-import { Switch, Route, useRouteMatch } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { Routes, Route, useMatch, useLocation } from 'react-router-dom'
 
 import AppHeader from '../components/AppHeader'
 import api from '../services/api'
@@ -15,7 +15,8 @@ const ShopArchives = () => {
     document.title = 'KD Shop Archives | Survivor.tools'
   }, [])
 
-  const { path, url } = useRouteMatch()
+  const location = useLocation()
+  const isExactMatch = useMatch('/shop')
 
   const { isLoading, isError, data, error } = useQuery(
     'productList',
@@ -158,7 +159,7 @@ const ShopArchives = () => {
     <>
       <AppHeader
         backIcon={
-          useRouteMatch('/shop')?.isExact ? (
+          isExactMatch ? (
             <></>
           ) : (
             <HStack spacing="0">
@@ -172,33 +173,36 @@ const ShopArchives = () => {
           )
         }
       ></AppHeader>
-      <Switch>
+      <Routes>
         <Route
-          path={`${path}/:productId`}
-          render={(routeProps) => (
+          path=":productId"
+          element={
             <ProductDetailsContainer
-              productId={routeProps.match.params.productId}
+              productId={location.pathname.split('/').pop()}
               filteredProducts={filteredProducts}
             />
-          )}
-        ></Route>
-        <Route path={path}>
-          <ProductList
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            tagFilters={tagFilters}
-            dispatchTagFilterChange={dispatchTagFilterChange}
-            typeFilters={typeFilters}
-            dispatchTypeFilterChange={dispatchTypeFilterChange}
-            stateFilters={stateFilters}
-            dispatchStateFilterChange={dispatchStateFilterChange}
-            filteredProducts={filteredProducts}
-            isLoading={isLoading}
-            isError={isError}
-            error={error}
-          />
-        </Route>
-      </Switch>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <ProductList
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              tagFilters={tagFilters}
+              dispatchTagFilterChange={dispatchTagFilterChange}
+              typeFilters={typeFilters}
+              dispatchTypeFilterChange={dispatchTypeFilterChange}
+              stateFilters={stateFilters}
+              dispatchStateFilterChange={dispatchStateFilterChange}
+              filteredProducts={filteredProducts}
+              isLoading={isLoading}
+              isError={isError}
+              error={error}
+            />
+          }
+        />
+      </Routes>
     </>
   )
 }

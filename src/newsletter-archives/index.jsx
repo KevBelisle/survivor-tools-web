@@ -2,8 +2,8 @@ import { HStack, Icon, Text } from '@chakra-ui/react'
 import Fuse from 'fuse.js'
 import React, { useEffect, useMemo, useState } from 'react'
 import { HiArrowNarrowLeft, HiOutlineViewList } from 'react-icons/hi'
-import { useQuery } from 'react-query'
-import { Switch, Route, useRouteMatch } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { Routes, Route, useMatch, useLocation } from 'react-router-dom'
 
 import AppHeader from '../components/AppHeader'
 import api from '../services/api'
@@ -16,7 +16,8 @@ const NewsletterArchives = () => {
     document.title = 'KD Newsletter Archives | Survivor.tools'
   }, [])
 
-  const { path, url } = useRouteMatch()
+  const location = useLocation()
+  const isExactMatch = useMatch('/newsletter')
 
   const { isLoading, isError, data, error } = useQuery(
     'newsletterList',
@@ -68,7 +69,7 @@ const NewsletterArchives = () => {
     <>
       <AppHeader
         backIcon={
-          useRouteMatch('/newsletter').isExact ? (
+          isExactMatch ? (
             <></>
           ) : (
             <HStack spacing="0">
@@ -82,29 +83,34 @@ const NewsletterArchives = () => {
           )
         }
       ></AppHeader>
-      <Switch>
+      <Routes>
         <Route
-          path={`${path}/:newsletterId`}
-          render={(routeProps) => (
+          path=":newsletterId"
+          element={
             <NewsletterDetails
-              newsletterId={routeProps.match.params.newsletterId}
+              newsletterId={location.pathname.split('/').pop()}
               filteredNewsletters={filteredNewsletters}
             />
-          )}
-        ></Route>
-        <Route path={path}>
-          <NewsletterListSearch
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-          />
-          <NewsletterList
-            filteredNewsletters={filteredNewsletters}
-            isLoading={isLoading}
-            isError={isError}
-            error={error}
-          />
-        </Route>
-      </Switch>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <>
+              <NewsletterListSearch
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+              />
+              <NewsletterList
+                filteredNewsletters={filteredNewsletters}
+                isLoading={isLoading}
+                isError={isError}
+                error={error}
+              />
+            </>
+          }
+        />
+      </Routes>
     </>
   )
 }
