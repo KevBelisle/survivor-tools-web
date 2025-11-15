@@ -12,8 +12,8 @@ import {
 } from '@chakra-ui/react'
 import React, { useMemo } from 'react'
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi'
-import { useQuery, useQueryClient } from 'react-query'
-import { Link, useRouteMatch } from 'react-router-dom'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { Link } from 'react-router-dom'
 
 import api from '../../services/api'
 
@@ -23,9 +23,12 @@ const NewsletterDetails = ({ newsletterId, filteredNewsletters }) => {
     isError,
     data: newsletter,
     error,
-  } = useQuery(['newsletter', newsletterId], async () => {
-    const { data } = await api.get(`/newsletter/${newsletterId}`)
-    return data
+  } = useQuery({
+    queryKey: ['newsletter', newsletterId],
+    queryFn: async () => {
+      const { data } = await api.get(`/newsletter/${newsletterId}`)
+      return data
+    },
   })
 
   function dangerousHtml() {

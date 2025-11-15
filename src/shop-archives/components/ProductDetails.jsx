@@ -18,45 +18,11 @@ import {
   HiChevronDoubleUp,
   HiOutlineShoppingCart,
 } from 'react-icons/hi'
-import { SRLWrapper, useLightbox } from 'simple-react-lightbox'
 
 import ProductVariantDetails from './ProductVariantDetails'
 
 function ProductDetails({ product }) {
   const [expandedDescription, setExpandedDescription] = useState(false)
-  const { openLightbox } = useLightbox()
-
-  const overlayColor = useColorModeValue('#E2E8F0', '#4A5568') // ('gray.200', 'gray.600'),
-  const captionColor = useColorModeValue('#2D3748', '#EDF2F7') // ('gray.700', 'gray.100'),
-  const backgroundColor = useColorModeValue('#FFFFFF', '#171923') // ('white', 'gray.900'),
-  const iconColor = useColorModeValue('#A0AEC0', '#E2E8F0') // ('gray.400', 'gray.200'),
-
-  const srlOptions = useMemo(() => {
-    return {
-      settings: {
-        disableWheelControls: true,
-        overlayColor: overlayColor,
-        lightboxTransitionSpeed: 0.1,
-        slideAnimationType: null,
-        slideTransitionSpeed: 0,
-      },
-      caption: {
-        captionColor: captionColor,
-      },
-      buttons: {
-        backgroundColor: backgroundColor,
-        iconColor: iconColor,
-        showAutoplayButton: false,
-        showThumbnailsButton: false,
-      },
-      thumbnails: {
-        showThumbnails: false,
-      },
-      progressBar: {
-        showProgressBar: false,
-      },
-    }
-  }, [overlayColor, captionColor, backgroundColor, iconColor])
 
   return (
     <>
@@ -154,18 +120,22 @@ function ProductDetails({ product }) {
             >
               {product.images.map((image, index) => (
                 <WrapItem key={index}>
-                  <Box
-                    width="120px"
-                    height="120px"
-                    backgroundImage={`url('https://archives.survivor.tools/images/${image.thumbnailUri}')`}
-                    backgroundSize="cover"
-                    backgroundColor="white"
-                    backgroundPosition="center"
-                    rounded="sm"
-                    onClick={() => {
-                      openLightbox(index)
-                    }}
-                  />
+                  <a
+                    href={`https://archives.survivor.tools/images/${image.uri}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Box
+                      width="120px"
+                      height="120px"
+                      backgroundImage={`url('https://archives.survivor.tools/images/${image.thumbnailUri}')`}
+                      backgroundSize="cover"
+                      backgroundColor="white"
+                      backgroundPosition="center"
+                      rounded="sm"
+                      cursor="pointer"
+                    />
+                  </a>
                 </WrapItem>
               ))}
             </Wrap>
@@ -184,22 +154,6 @@ function ProductDetails({ product }) {
           [product.variants, product.details.listed]
         )}
       </VStack>
-
-      {useMemo(
-        () => (
-          <SRLWrapper
-            elements={product.images.map((image, index) => ({
-              src: `https://archives.survivor.tools/images/${image.uri}`,
-              thumbnail: `https://archives.survivor.tools/images/${image.thumbnailUri}`,
-              caption: image.alt,
-              width: image.width,
-              height: 'auto',
-            }))}
-            options={srlOptions}
-          />
-        ),
-        [product.images, srlOptions]
-      )}
     </>
   )
 }

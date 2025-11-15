@@ -1,23 +1,38 @@
-import { useEffect, useState } from 'react'
-import useIsInViewport from 'use-is-in-viewport'
+import { useEffect, useRef, useState } from 'react'
 
-const useClampedIsInViewport = (options) => {
-  const [isInViewport, ...etc] = useIsInViewport(options)
-  const [wasInViewportAtleastOnce, setWasInViewportAtleastOnce] =
-    useState(isInViewport)
+const useClampedIsInViewport = (options = {}) => {
+  const [isInViewport, setIsInViewport] = useState(false)
+  const [wasInViewportAtleastOnce, setWasInViewportAtleastOnce] = useState(false)
+  const targetRef = useRef(null)
 
   useEffect(() => {
-    setWasInViewportAtleastOnce((prev) => {
-      // this will clamp it to the first true
-      // received from useIsInViewport
-      if (!prev) {
-        return isInViewport
-      }
-      return prev
-    })
-  }, [isInViewport])
+    const target = targetRef.current
+    if (!target) return
 
-  return [wasInViewportAtleastOnce, ...etc]
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInViewport(entry.isIntersecting)
+      },
+      {
+        threshold: options.threshold || 0,
+        rootMargin: options.rootMargin || '0px',
+      }
+    )
+
+    observer.observe(target)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [options.threshold, options.rootMargin])
+
+  useEffect(() => {
+    if (isInViewport && !wasInViewportAtleastOnce) {
+      setWasInViewportAtleastOnce(true)
+    }
+  }, [isInViewport, wasInViewportAtleastOnce])
+
+  return [wasInViewportAtleastOnce, targetRef]
 }
 
 export default useClampedIsInViewport

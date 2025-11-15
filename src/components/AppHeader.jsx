@@ -17,11 +17,11 @@ import {
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { HiChatAlt } from 'react-icons/hi'
-import { Link, useHistory, useLocation } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 
 const AppHeader = ({ backIcon }) => {
   const { colorMode, toggleColorMode } = useColorMode()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const baseRoute = useLocation().pathname.split('/')[1]
 
@@ -54,7 +54,7 @@ const AppHeader = ({ backIcon }) => {
               value={baseRoute}
               onChange={(e) => {
                 setTitle(e.currentTarget.value)
-                history.push(`/${e.currentTarget.value}`)
+                navigate(`/${e.currentTarget.value}`)
               }}
               fontWeight="bold"
             >

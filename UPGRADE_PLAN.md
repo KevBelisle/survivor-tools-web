@@ -8,11 +8,11 @@ This document outlines the complete upgrade path from:
 - **React Router 5.3.4** → **React Router 7.x**
 - **React Query 3.15.2** → **TanStack Query 5.x**
 
-**Status:** Phase 1 Complete ✓ | Phase 2 In Progress
+**Status:** Phase 1 Complete ✓ | Phase 2A Complete ✓ | Phase 2B Pending
 
 ---
 
-## Current State (After Phase 1)
+## Current State (After Phase 2A)
 
 ### Current Dependencies
 ```json
@@ -20,30 +20,25 @@ This document outlines the complete upgrade path from:
   "react": "^18.2.0",
   "react-dom": "^18.2.0",
   "@chakra-ui/react": "^2.8.2",
-  "@emotion/react": "^11.11.0",
-  "@emotion/styled": "^11.11.0",
-  "framer-motion": "^6.5.1",
-  "react-router-dom": "^5.3.4",
-  "history": "^5.0.0",
-  "react-query": "^3.15.2",
-  "react-icons": "^4.2.0",
-  "@microsoft/applicationinsights-react-js": "^3.1.2",
-  "react-responsive-masonry": "^2.1.2",
-  "simple-react-lightbox": "^3.6.6",
-  "use-is-in-viewport": "^1.0.9",
+  "@emotion/react": "^11.14.0",
+  "@emotion/styled": "^11.14.1",
+  "@tanstack/react-query": "^5.90.0",
+  "react-router-dom": "^7.0.0",
+  "react-icons": "^5.5.0",
+  "react-responsive-masonry": "^2.7.1",
   "axios": "^0.21.1",
-  "vite": "^5.4.0",
-  "@vitejs/plugin-react": "^4.3.0"
+  "vite": "^6.0.1",
+  "@vitejs/plugin-react": "^5.1.0"
 }
 ```
 
-### Package Usage Analysis
-- **framer-motion**: Installed but NOT USED (0 imports) - can be removed
-- **simple-react-lightbox**: Used in 2 files (shop product gallery) - deprecated, needs replacement
-- **use-is-in-viewport**: Abandoned package (6 years old) - needs replacement
-- **react-query**: Used in 6 files - migrate to @tanstack/react-query
-- **react-router-dom**: Used in 8 files (useRouteMatch, useHistory, Switch, Route)
-- **@chakra-ui/react**: 29 files, 520 component instances
+### What Changed in Phase 2A
+- ✅ **Removed deprecated packages**: framer-motion, simple-react-lightbox, use-is-in-viewport, @microsoft/applicationinsights-react-js, history
+- ✅ **Upgraded to React 18/19 compatible versions**: All dependencies now support React 18 and most support React 19
+- ✅ **Migrated React Query**: react-query → @tanstack/react-query v5
+- ✅ **Migrated React Router**: v5 → v7 with new APIs (Routes, useNavigate, useMatch)
+- ✅ **Replaced lightbox**: Direct image links with target="_blank"
+- ✅ **Custom IntersectionObserver hook**: Replaced abandoned use-is-in-viewport package
 
 ---
 
@@ -76,9 +71,10 @@ Research has revealed that **true "bridge" versions (supporting both React 18 AN
 
 ---
 
-### Step 2A: Prepare Dependencies (Stay on React 18)
+### Step 2A: Prepare Dependencies (Stay on React 18) ✅ COMPLETED
 
-**Estimated Time: 6-8 hours**
+**Status:** ✅ Complete
+**Actual Time:** Completed in single session
 
 #### Packages to REMOVE
 ```json
@@ -219,32 +215,46 @@ Files with useRouteMatch:
 - Search for usage and replace with custom IntersectionObserver hook or alternative
 
 #### Testing Checklist
-- [ ] All routes load correctly
-- [ ] Navigation works (useNavigate)
-- [ ] Nested routes work correctly
-- [ ] Data fetching works (TanStack Query)
-- [ ] Image gallery shows direct links instead of lightbox
-- [ ] No console errors or warnings
-- [ ] All breakpoints still work
+- [x] All routes load correctly
+- [x] Navigation works (useNavigate)
+- [x] Nested routes work correctly
+- [x] Data fetching works (TanStack Query)
+- [x] Image gallery shows direct links instead of lightbox
+- [x] No console errors or warnings
+- [x] Build completes successfully with vite v6.0.1
+
+#### Summary of Changes
+All planned changes for Step 2A have been completed:
+- ✅ Removed 7 packages (framer-motion, simple-react-lightbox, use-is-in-viewport, @microsoft/applicationinsights-react-js, @microsoft/applicationinsights-web, react-query, history)
+- ✅ Upgraded 7 packages to React 18/19 compatible versions
+- ✅ Migrated React Query to @tanstack/react-query in 6 files
+- ✅ Migrated React Router v5 → v7 in 10+ files
+- ✅ Replaced lightbox with direct image links
+- ✅ Implemented custom IntersectionObserver hook
+- ✅ Build tested and passing
 
 ---
 
 ### Step 2B: Upgrade React to 19
 
+**Status:** 🔄 Pending
 **Estimated Time: 1-2 hours**
 
 #### Packages to Update
 ```json
 {
   "react": "^19.0.0",
-  "react-dom": "^19.0.0",
-  "@microsoft/applicationinsights-react-js": "^19.3.8"  // Version-locked to React version
+  "react-dom": "^19.0.0"
 }
 ```
 
+**Note:** @microsoft/applicationinsights-react-js was removed in Step 2A
+
 #### Code Changes
 - Run React 19 codemod: `npx codemod@latest react/19/migration-recipe`
-- Run TypeScript types codemod: `npx types-react-codemod@latest preset-19 ./src`
+- Run TypeScript types codemod (if using TypeScript): `npx types-react-codemod@latest preset-19 ./src`
+- Update package.json with React 19 versions
+- Install dependencies with `npm install`
 
 #### Testing Checklist
 - [ ] All functionality from Step 2A still works
@@ -465,15 +475,15 @@ Must review all component prop usage:
 
 ## Timeline Summary
 
-| Phase | Task | Status | Estimated Time |
-|-------|------|--------|----------------|
-| 1 | React 18 + Chakra 2.x | ✅ Complete | ~2-3 days |
-| 2A | Prepare dependencies | 🔄 Pending | 6-8 hours |
-| 2B | Upgrade React to 19 | 🔄 Pending | 1-2 hours |
-| 2C | Address Chakra UI | 🔄 Pending | 0-4 days |
-| 3 | Chakra UI v3 (if not done in 2C) | 🔄 Pending | 2-4 days |
-| - | Testing & bug fixes | 🔄 Ongoing | 1-2 days buffer |
-| **Total** | | | **~7-12 days** |
+| Phase | Task | Status | Estimated Time | Actual Time |
+|-------|------|--------|----------------|-------------|
+| 1 | React 18 + Chakra 2.x | ✅ Complete | ~2-3 days | Completed |
+| 2A | Prepare dependencies | ✅ Complete | 6-8 hours | 1 session |
+| 2B | Upgrade React to 19 | 🔄 Pending | 1-2 hours | - |
+| 2C | Address Chakra UI | 🔄 Pending | 0-4 days | - |
+| 3 | Chakra UI v3 (if not done in 2C) | 🔄 Pending | 2-4 days | - |
+| - | Testing & bug fixes | 🔄 Ongoing | 1-2 days buffer | - |
+| **Total** | | **Phase 1 & 2A Done** | **~7-12 days** | **~3-4 days + 1 session** |
 
 ---
 
@@ -534,13 +544,14 @@ For each step:
 
 ## Recommendations
 
-1. **Start with Step 2A** - Get all dependencies to React 18/19 compatible versions first
-2. **Test thoroughly** after each step - don't batch changes
-3. **Consider Chakra UI v3 migration** as part of Phase 2C - better to do it once
-4. **Budget extra time** for testing and unexpected issues
-5. **Use feature branches** for each step - makes rollback easier
+1. ~~**Start with Step 2A**~~ - ✅ **COMPLETED** - All dependencies now React 18/19 compatible
+2. **Next: Step 2B** - Upgrade to React 19 (simple package.json update)
+3. **Test thoroughly** after each step - don't batch changes
+4. **Consider Chakra UI v3 migration** as part of Phase 2C - better to do it once
+5. **Budget extra time** for testing and unexpected issues
+6. **Use feature branches** for each step - makes rollback easier
 
 ---
 
-*Last Updated: 2025-11-14*
-*Phase 1: Complete ✅ | Phase 2: Ready to Begin*
+*Last Updated: 2025-11-15*
+*Phase 1: Complete ✅ | Phase 2A: Complete ✅ | Phase 2B: Ready to Begin*

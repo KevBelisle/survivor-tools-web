@@ -1,6 +1,6 @@
 import { Box, Tag, Text, useColorModeValue } from '@chakra-ui/react'
 import React from 'react'
-import { Link, useRouteMatch } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import useClampedIsInViewport from '../../hooks/useClampedIsInViewport'
 
@@ -44,7 +44,6 @@ const tags = {
 }
 
 const ProductSummaryCard = ({ product }) => {
-  const { path, url } = useRouteMatch()
   const tag = product.state ? tags[product.state] : <></>
   const [hasBeenInViewport, targetRef] = useClampedIsInViewport()
 
@@ -57,7 +56,7 @@ const ProductSummaryCard = ({ product }) => {
       cursor="pointer"
       ref={targetRef}
     >
-      <Link to={`${url}/${product.id}`}>
+      <Link to={`./${product.id}`}>
         <Box
           width="320px"
           height={`${Math.round(

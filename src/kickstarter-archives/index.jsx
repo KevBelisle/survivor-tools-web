@@ -2,8 +2,8 @@ import { HStack, Icon, Text } from '@chakra-ui/react'
 import Fuse from 'fuse.js'
 import React, { useEffect, useMemo, useReducer, useState } from 'react'
 import { HiArrowNarrowLeft, HiOutlineViewList } from 'react-icons/hi'
-import { useQuery } from 'react-query'
-import { Switch, Route, useRouteMatch } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { Routes, Route, useMatch, useLocation } from 'react-router-dom'
 
 import AppHeader from '../components/AppHeader'
 import api from '../services/api'
@@ -16,38 +16,37 @@ const KickstarterArchives = () => {
     document.title = 'KD Kickstarter Archives | Survivor.tools'
   }, [])
 
-  const { path, url } = useRouteMatch()
+  const location = useLocation()
+  const isExactMatch = useMatch('/kickstarter')
 
-  const { isLoading, isError, data, error } = useQuery(
-    'updateList',
-    async () => {
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ['updateList'],
+    queryFn: async () => {
       const { data } = await api.get('/kickstarter-updates')
       return data
     },
-    {
-      select: React.useCallback(
-        (data) => ({
-          updates: data.updates,
-          fuse: new Fuse(data.updates, {
-            minMatchCharLength: 3,
-            useExtendedSearch: true,
-            ignoreLocation: true,
-            includeMatches: true,
-            shouldSort: false,
-            keys: ['text'],
-          }),
-        }),
-        [],
-      ),
-      initialData: {
-        updates: [],
-        fuse: new Fuse([], {
+    select: React.useCallback(
+      (data) => ({
+        updates: data.updates,
+        fuse: new Fuse(data.updates, {
           minMatchCharLength: 3,
+          useExtendedSearch: true,
+          ignoreLocation: true,
+          includeMatches: true,
+          shouldSort: false,
           keys: ['text'],
         }),
-      },
+      }),
+      [],
+    ),
+    initialData: {
+      updates: [],
+      fuse: new Fuse([], {
+        minMatchCharLength: 3,
+        keys: ['text'],
+      }),
     },
-  )
+  })
 
   window.fuse = data.fuse
 
@@ -68,7 +67,7 @@ const KickstarterArchives = () => {
     <>
       <AppHeader
         backIcon={
-          useRouteMatch('/kickstarter').isExact ? (
+          isExactMatch ? (
             <></>
           ) : (
             <HStack spacing="0">
@@ -82,32 +81,37 @@ const KickstarterArchives = () => {
           )
         }
       ></AppHeader>
-      <Switch>
+      <Routes>
         <Route
-          path={`${path}/:updateId`}
-          render={(routeProps) => (
+          path=":updateId"
+          element={
             <UpdateDetails
-              updateId={routeProps.match.params.updateId}
+              updateId={location.pathname.split('/').pop()}
               filteredUpdates={filteredUpdates}
               isLoading={isLoading}
               isError={isError}
               error={error}
             />
-          )}
-        ></Route>
-        <Route path={path}>
-          <UpdateListSearch
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-          />
-          <UpdateList
-            filteredUpdates={filteredUpdates}
-            isLoading={isLoading}
-            isError={isError}
-            error={error}
-          />
-        </Route>
-      </Switch>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <>
+              <UpdateListSearch
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+              />
+              <UpdateList
+                filteredUpdates={filteredUpdates}
+                isLoading={isLoading}
+                isError={isError}
+                error={error}
+              />
+            </>
+          }
+        />
+      </Routes>
     </>
   )
 }
