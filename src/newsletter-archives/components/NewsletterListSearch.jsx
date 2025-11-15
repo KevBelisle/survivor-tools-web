@@ -5,12 +5,8 @@ import {
   CheckboxGroup,
   Input,
   HStack,
-  MenuButton,
-  Menu,
-  MenuList,
   VStack,
   useBreakpointValue,
-  useColorModeValue,
 } from '@chakra-ui/react'
 import React from 'react'
 import { HiChevronDown } from 'react-icons/hi'
@@ -27,7 +23,7 @@ const NewsletterListSearch = ({ searchTerm, setSearchTerm }) => {
   )
   return (
     <Box
-      bg={useColorModeValue('gray.300', 'gray.900')}
+      bg={{ base: 'gray.300', _dark: 'gray.900' }}
       borderBottomStyle="solid"
       borderBottomWidth="1px"
       px="4"

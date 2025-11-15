@@ -3,16 +3,14 @@ import {
   Center,
   Flex,
   Tag,
-  useColorModeValue,
-  useToken,
 } from '@chakra-ui/react'
 import React from 'react'
 import NewsletterSummary from './NewsletterSummary'
 
 const NewsletterListTimeline = ({ filteredNewsletters }) => {
-  const timelineWidth = useToken('spacing', '8')
-  const tagBackground = useColorModeValue('white', 'gray.800')
-  const yearBackground = useColorModeValue('teal.400', 'teal.500')
+  const timelineWidth = 2 // 2rem (equivalent to spacing.8)
+  const tagBackground = { base: 'white', _dark: 'gray.800' }
+  const yearBackground = { base: 'teal.400', _dark: 'teal.500' }
 
   return (
     <>
@@ -23,10 +21,7 @@ const NewsletterListTimeline = ({ filteredNewsletters }) => {
         left={`${timelineWidth / 2}rem`}
         width="2px"
         ml="-1px"
-        background={`linear-gradient(0deg, rgba(0,0,0,0) 0, ${useToken(
-          'colors',
-          yearBackground
-        )} 50px)`}
+        background="linear-gradient(0deg, rgba(0,0,0,0) 0, var(--chakra-colors-teal-500) 50px)"
       />
       {filteredNewsletters.map((newsletter, index) => {
         const date = newsletter.item.sentAt.substring(0, 10)

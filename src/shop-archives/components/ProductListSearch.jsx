@@ -5,12 +5,9 @@ import {
   CheckboxGroup,
   Input,
   HStack,
-  MenuButton,
   Menu,
-  MenuList,
   VStack,
   useBreakpointValue,
-  useColorModeValue,
 } from '@chakra-ui/react'
 import React from 'react'
 import { HiChevronDown } from 'react-icons/hi'
@@ -42,11 +39,13 @@ const ProductListSearch = ({
     })
   const selectedTypes = typesArray.filter((x) => x.value).length
   const typesSelector = (
-    <Menu>
-      <MenuButton as={Button} rightIcon={<HiChevronDown />} width="100%">
-        Product Types {selectedTypes ? `(${selectedTypes})` : <></>}
-      </MenuButton>
-      <MenuList maxHeight="80vh" overflowY="auto">
+    <Menu.Root>
+      <Menu.Trigger asChild>
+        <Button width="100%">
+          Product Types {selectedTypes ? `(${selectedTypes})` : <></>} <HiChevronDown />
+        </Button>
+      </Menu.Trigger>
+      <Menu.Content maxHeight="80vh" overflowY="auto">
         <CheckboxGroup colorScheme="green">
           <VStack align="flex-start" px="4">
             {typesArray.sort().map((type) => (
@@ -68,8 +67,8 @@ const ProductListSearch = ({
             ))}
           </VStack>
         </CheckboxGroup>
-      </MenuList>
-    </Menu>
+      </Menu.Content>
+    </Menu.Root>
   )
 
   const tagsArray = Object.keys(tags)
@@ -79,11 +78,13 @@ const ProductListSearch = ({
     })
   const selectedTags = tagsArray.filter((x) => x.value).length
   const tagsSelector = (
-    <Menu>
-      <MenuButton as={Button} rightIcon={<HiChevronDown />} width="100%">
-        Product Tags {selectedTags ? `(${selectedTags})` : <></>}
-      </MenuButton>
-      <MenuList maxHeight="80vh" overflowY="auto">
+    <Menu.Root>
+      <Menu.Trigger asChild>
+        <Button width="100%">
+          Product Tags {selectedTags ? `(${selectedTags})` : <></>} <HiChevronDown />
+        </Button>
+      </Menu.Trigger>
+      <Menu.Content maxHeight="80vh" overflowY="auto">
         <CheckboxGroup colorScheme="green">
           <VStack align="flex-start" px="4">
             {tagsArray.sort().map((tag) => (
@@ -105,8 +106,8 @@ const ProductListSearch = ({
             ))}
           </VStack>
         </CheckboxGroup>
-      </MenuList>
-    </Menu>
+      </Menu.Content>
+    </Menu.Root>
   )
 
   const statesArray = Object.keys(states)
@@ -116,11 +117,13 @@ const ProductListSearch = ({
     })
   const selectedStates = statesArray.filter((x) => x.value).length
   const statesSelector = (
-    <Menu>
-      <MenuButton as={Button} rightIcon={<HiChevronDown />} width="100%">
-        Product States {selectedStates ? `(${selectedStates})` : <></>}
-      </MenuButton>
-      <MenuList maxHeight="80vh" overflowY="auto">
+    <Menu.Root>
+      <Menu.Trigger asChild>
+        <Button width="100%">
+          Product States {selectedStates ? `(${selectedStates})` : <></>} <HiChevronDown />
+        </Button>
+      </Menu.Trigger>
+      <Menu.Content maxHeight="80vh" overflowY="auto">
         <CheckboxGroup colorScheme="green">
           <VStack align="flex-start" px="4">
             {statesArray.sort().map((state) => (
@@ -142,13 +145,13 @@ const ProductListSearch = ({
             ))}
           </VStack>
         </CheckboxGroup>
-      </MenuList>
-    </Menu>
+      </Menu.Content>
+    </Menu.Root>
   )
 
   return (
     <Box
-      bg={useColorModeValue('gray.300', 'gray.900')}
+      bg={{ base: 'gray.300', _dark: 'gray.900' }}
       borderBottomStyle="solid"
       borderBottomWidth="1px"
       px="4"

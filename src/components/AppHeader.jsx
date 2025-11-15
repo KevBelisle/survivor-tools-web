@@ -12,15 +12,14 @@ import {
   Switch,
   Text,
   useBreakpointValue,
-  useColorMode,
-  useColorModeValue,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
+import { useTheme } from 'next-themes'
 import { HiChatAlt } from 'react-icons/hi'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 
 const AppHeader = ({ backIcon }) => {
-  const { colorMode, toggleColorMode } = useColorMode()
+  const { theme, setTheme } = useTheme()
   const navigate = useNavigate()
 
   const baseRoute = useLocation().pathname.split('/')[1]
@@ -29,10 +28,10 @@ const AppHeader = ({ backIcon }) => {
 
   return (
     <Box
-      bg={useColorModeValue('white', 'gray.800')}
+      bg={{ base: 'white', _dark: 'gray.800' }}
       borderBottomStyle="solid"
       borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue('gray.300', 'black')}
+      borderBottomColor={{ base: 'gray.300', _dark: 'black' }}
       px="4"
       py="2"
     >
@@ -86,8 +85,8 @@ const AppHeader = ({ backIcon }) => {
             <Text fontSize="sm">Light</Text>
             <Switch
               size="sm"
-              isChecked={colorMode === 'dark'}
-              onChange={toggleColorMode}
+              checked={theme === 'dark'}
+              onCheckedChange={(e) => setTheme(e.checked ? 'dark' : 'light')}
             />
             <Text fontSize="sm">Dark</Text>
           </HStack>

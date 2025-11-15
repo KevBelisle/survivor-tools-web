@@ -1,4 +1,4 @@
-import { Box, Skeleton, Text, useColorModeValue } from '@chakra-ui/react'
+import { Box, Skeleton, Text } from '@chakra-ui/react'
 import React from 'react'
 
 const ProductSummaryCard = () => {
@@ -17,11 +17,11 @@ const ProductSummaryCard = () => {
             height="423px"
             borderBottomStyle="solid"
             borderBottomWidth="1px"
-            borderBottomColor={useColorModeValue('gray.300', 'black')}
+            borderBottomColor={{ base: 'gray.300', _dark: 'black' }}
             backgroundColor="white"
           />
         </Skeleton>
-        <Box py="2" px="4" bg={useColorModeValue('gray.100', 'gray.800')}>
+        <Box py="2" px="4" bg={{ base: 'gray.100', _dark: 'gray.800' }}>
           <Skeleton>
             <Text fontWeight="semibold">Skeleton</Text>
           </Skeleton>

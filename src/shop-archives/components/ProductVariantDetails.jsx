@@ -10,12 +10,9 @@ import {
   PopoverBody,
   SimpleGrid,
   Stat,
-  StatLabel,
-  StatNumber,
   Tag,
   Text,
   useBreakpointValue,
-  useColorModeValue,
 } from '@chakra-ui/react'
 import React from 'react'
 import { HiInformationCircle } from 'react-icons/hi'
@@ -24,7 +21,7 @@ import ProductVariantStockGraph from './ProductVariantStockGraph'
 
 const ProductVariantDetails = ({ variant, listed }) => {
   const stockGraph = (
-    <Box px="4" py="4" bg={useColorModeValue('gray.100', 'gray.900')}>
+    <Box px="4" py="4" bg={{ base: 'gray.100', _dark: 'gray.900' }}>
       {variant.stockHistory.length >= 6 ? (
         <Box minHeight="300px">
           <ProductVariantStockGraph stockHistory={variant.stockHistory} />
@@ -70,15 +67,15 @@ const ProductVariantDetails = ({ variant, listed }) => {
       shadow="base"
       overflow="hidden"
     >
-      <Box px="4" py="4" bg={useColorModeValue('white', 'gray.800')}>
+      <Box px="4" py="4" bg={{ base: 'white', _dark: 'gray.800' }}>
         <Text fontWeight="semibold">{variant.details.title}</Text>
         <Text fontSize="sm" color="gray.400">
           {variant.details.sku}
         </Text>
         <HStack mt={{ base: '4', md: '8' }}>
-          <Stat>
-            <StatLabel>Last known price</StatLabel>
-            <StatNumber>
+          <Stat.Root>
+            <Stat.Label>Last known price</Stat.Label>
+            <Stat.ValueText>
               <HStack alignItems="flex-start" spacing={0}>
                 <Text>{lastKnownPrice}</Text>
                 {maxPrice === minPrice ? (
@@ -110,11 +107,11 @@ const ProductVariantDetails = ({ variant, listed }) => {
                   </Popover>
                 )}
               </HStack>
-            </StatNumber>
-          </Stat>
-          <Stat>
-            <StatLabel>Current stock</StatLabel>
-            <StatNumber>
+            </Stat.ValueText>
+          </Stat.Root>
+          <Stat.Root>
+            <Stat.Label>Current stock</Stat.Label>
+            <Stat.ValueText>
               {listed ? (
                 variant.stockHistory[0].stock
               ) : (
@@ -122,8 +119,8 @@ const ProductVariantDetails = ({ variant, listed }) => {
                   Unlisted
                 </Tag>
               )}
-            </StatNumber>
-          </Stat>
+            </Stat.ValueText>
+          </Stat.Root>
         </HStack>
       </Box>
       {showGraph ? stockGraph : <></>}

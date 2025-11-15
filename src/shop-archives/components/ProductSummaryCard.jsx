@@ -1,4 +1,4 @@
-import { Box, Tag, Text, useColorModeValue } from '@chakra-ui/react'
+import { Box, Tag, Text } from '@chakra-ui/react'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
@@ -70,10 +70,10 @@ const ProductSummaryCard = ({ product }) => {
           backgroundSize="cover"
           borderBottomStyle="solid"
           borderBottomWidth="1px"
-          borderBottomColor={useColorModeValue('gray.300', 'black')}
+          borderBottomColor={{ base: 'gray.300', _dark: 'black' }}
           backgroundColor="white"
         />
-        <Box py="2" px="4" bg={useColorModeValue('gray.100', 'gray.800')}>
+        <Box py="2" px="4" bg={{ base: 'gray.100', _dark: 'gray.800' }}>
           {tag}
           <Text fontWeight="semibold">{product.title}</Text>
         </Box>

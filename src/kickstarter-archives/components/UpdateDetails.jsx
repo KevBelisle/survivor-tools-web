@@ -7,7 +7,6 @@ import {
   Icon,
   Heading,
   Text,
-  useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
 import React, { useMemo } from 'react'
@@ -21,8 +20,6 @@ const UpdateDetails = ({
   isError,
   error,
 }) => {
-  const contentBgColor = useColorModeValue('white', 'gray.800')
-
   const [update, prevUpdate, nextUpdate] = useMemo(() => {
     const index = filteredUpdates.findIndex((x) => x.item.id === updateId)
     if (index < 0) return [null, null, null]
@@ -117,7 +114,7 @@ const UpdateDetails = ({
               rounded="md"
               overflow="hidden"
               shadow="base"
-              bg={contentBgColor}
+              bg={{ base: 'white', _dark: 'gray.800' }}
               mb="20px"
               px="4"
               py="4"

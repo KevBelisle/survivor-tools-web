@@ -6,7 +6,6 @@ import {
   SkeletonCircle,
   SkeletonText,
   Tag,
-  useColorModeValue,
   VStack,
   Wrap,
   WrapItem,
@@ -33,14 +32,14 @@ function ProductDetailsSkeleton() {
             px="4"
             py="4"
             roundedTop="md"
-            bg={useColorModeValue('white', 'gray.900')}
+            bg={{ base: 'white', _dark: 'gray.900' }}
           >
             <SkeletonText
               pl="8"
               pr="8"
               py="4"
               fontSize="sm"
-              noOfLines={9}
+              lineClamp={9}
               spacing="4"
             />
           </Box>
@@ -48,7 +47,7 @@ function ProductDetailsSkeleton() {
             px="4"
             py="4"
             roundedBottom="md"
-            bg={useColorModeValue('gray.100', 'gray.800')}
+            bg={{ base: 'gray.100', _dark: 'gray.800' }}
           >
             <Wrap
               spacing={{

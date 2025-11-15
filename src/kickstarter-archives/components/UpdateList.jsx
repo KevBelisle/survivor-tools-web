@@ -4,8 +4,6 @@ import {
   Flex,
   Tag,
   useBreakpointValue,
-  useColorModeValue,
-  useToken,
 } from '@chakra-ui/react'
 import React from 'react'
 import UpdateListSimple from './UpdateListSimple'

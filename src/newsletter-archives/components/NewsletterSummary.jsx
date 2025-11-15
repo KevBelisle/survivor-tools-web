@@ -1,4 +1,4 @@
-import { Box, Text, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
@@ -33,7 +33,7 @@ const searchPreview = (text, searchMatches, textColor) => {
     const postMatchEndIndex = Math.min(match[1] + 300, text.length - 1)
 
     return (
-      <Text key={match[0]} color={textColor} noOfLines={1}>
+      <Text key={match[0]} color={textColor} lineClamp={1}>
         {preMatchStartIndex > 0 ? '...' : ''}
         {text.substring(preMatchStartIndex, matchStartIndex)}
         <b>{text.substring(matchStartIndex, matchEndIndex)}</b>
@@ -51,14 +51,14 @@ const NewsletterSummary = ({
   ...props
 }) => {
 
-  const textColor = useColorModeValue('gray.400', 'gray.400')
+  const textColor = { base: 'gray.400', _dark: 'gray.400' }
 
   var text = searchMatches
     ? searchPreview(newsletter.text, searchMatches, textColor)
     : basePreview(newsletter.text, textColor)
 
   var date = (
-    <Text fontSize="xs" color={useColorModeValue('gray.400', 'gray.400')}>
+    <Text fontSize="xs" color={{ base: 'gray.400', _dark: 'gray.400' }}>
       {newsletter.sentAt.substring(0, 10)}
     </Text>
   )
@@ -73,13 +73,13 @@ const NewsletterSummary = ({
       {...props}
     >
       <Link to={`./${newsletter.id}`}>
-        <Box py="2" px="4" bg={useColorModeValue('white', 'gray.800')}>
+        <Box py="2" px="4" bg={{ base: 'white', _dark: 'gray.800' }}>
           <VStack alignItems="flex-start">
             {includeDate ? date : <></>}
             <Text fontWeight="semibold">{newsletter.title}</Text>
           </VStack>
         </Box>
-        <Box py="2" px="4" bg={useColorModeValue('gray.100', 'gray.700')}>
+        <Box py="2" px="4" bg={{ base: 'gray.100', _dark: 'gray.700' }}>
           {text}
         </Box>
       </Link>

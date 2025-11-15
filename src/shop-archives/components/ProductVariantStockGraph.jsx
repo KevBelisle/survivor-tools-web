@@ -1,4 +1,4 @@
-import { useColorModeValue, Text, Box } from '@chakra-ui/react'
+import { Text, Box } from '@chakra-ui/react'
 import React from 'react'
 
 const ProductVariantStockGraph = ({ stockHistory }) => {
@@ -6,10 +6,10 @@ const ProductVariantStockGraph = ({ stockHistory }) => {
     <Box
       p={4}
       textAlign="center"
-      bg={useColorModeValue('gray.50', 'gray.700')}
+      bg={{ base: 'gray.50', _dark: 'gray.700' }}
       rounded="md"
     >
-      <Text fontSize="sm" color={useColorModeValue('gray.500', 'gray.400')}>
+      <Text fontSize="sm" color={{ base: 'gray.500', _dark: 'gray.400' }}>
         Stock history chart temporarily disabled
       </Text>
     </Box>

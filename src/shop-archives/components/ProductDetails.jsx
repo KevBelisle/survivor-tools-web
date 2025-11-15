@@ -6,7 +6,6 @@ import {
   Icon,
   Tag,
   Text,
-  useColorModeValue,
   VStack,
   Wrap,
   WrapItem,
@@ -59,7 +58,7 @@ function ProductDetails({ product }) {
             px="4"
             py="4"
             roundedTop="md"
-            bg={useColorModeValue('white', 'gray.900')}
+            bg={{ base: 'white', _dark: 'gray.900' }}
           >
             <Text
               pl="8"
@@ -106,7 +105,7 @@ function ProductDetails({ product }) {
             px="4"
             py="4"
             roundedBottom="md"
-            bg={useColorModeValue('gray.100', 'gray.800')}
+            bg={{ base: 'gray.100', _dark: 'gray.800' }}
           >
             <Wrap
               spacing={{

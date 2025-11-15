@@ -1,6 +1,6 @@
 import {
   Box,
-  ListItem,
+  List,
   Text,
   Popover,
   PopoverTrigger,
@@ -8,9 +8,7 @@ import {
   PopoverHeader,
   PopoverBody,
   PopoverArrow,
-  UnorderedList,
   useBreakpointValue,
-  useColorModeValue,
 } from '@chakra-ui/react'
 import React from 'react'
 
@@ -22,11 +20,11 @@ const AppVersion = () => (
       base: <></>,
       sm: (
         <Box
-          bg={useColorModeValue('white', 'gray.800')}
+          bg={{ base: 'white', _dark: 'gray.800' }}
           borderStyle="solid"
           borderTopWidth="1px"
           borderRightWidth="1px"
-          borderBottomColor={useColorModeValue('gray.300', 'black')}
+          borderBottomColor={{ base: 'gray.300', _dark: 'black' }}
           px="1"
           py="0"
           roundedTopRight="md"
@@ -46,12 +44,12 @@ const AppVersion = () => (
               </PopoverHeader>
               <PopoverArrow />
               <PopoverBody fontSize="sm" maxHeight="14em" overflowY="scroll">
-                <UnorderedList>
+                <List.Root>
                   {versions
                     .slice(0)
                     .reverse()
                     .map((x, i) => (
-                      <ListItem key={i}>
+                      <List.Item key={i}>
                         <Text
                           display="inline"
                           paddingRight="2"
@@ -60,9 +58,9 @@ const AppVersion = () => (
                           v{x.version}
                         </Text>
                         <Text display="inline">{x.releaseNotes}</Text>
-                      </ListItem>
+                      </List.Item>
                     ))}
-                </UnorderedList>
+                </List.Root>
               </PopoverBody>
             </PopoverContent>
           </Popover>
