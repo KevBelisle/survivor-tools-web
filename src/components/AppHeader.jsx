@@ -83,11 +83,16 @@ const AppHeader = ({ backIcon }) => {
               </Button>
             </ChakraLink>
             <Text fontSize="sm">Light</Text>
-            <Switch
+            <Switch.Root
               size="sm"
               checked={theme === 'dark'}
               onCheckedChange={(e) => setTheme(e.checked ? 'dark' : 'light')}
-            />
+            >
+              <Switch.HiddenInput />
+              <Switch.Control>
+                <Switch.Thumb />
+              </Switch.Control>
+            </Switch.Root>
             <Text fontSize="sm">Dark</Text>
           </HStack>
         </Flex>
