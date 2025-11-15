@@ -19,36 +19,34 @@ const KickstarterArchives = () => {
   const location = useLocation()
   const isExactMatch = useMatch('/kickstarter')
 
-  const { isLoading, isError, data, error } = useQuery(
-    'updateList',
-    async () => {
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ['updateList'],
+    queryFn: async () => {
       const { data } = await api.get('/kickstarter-updates')
       return data
     },
-    {
-      select: React.useCallback(
-        (data) => ({
-          updates: data.updates,
-          fuse: new Fuse(data.updates, {
-            minMatchCharLength: 3,
-            useExtendedSearch: true,
-            ignoreLocation: true,
-            includeMatches: true,
-            shouldSort: false,
-            keys: ['text'],
-          }),
-        }),
-        [],
-      ),
-      initialData: {
-        updates: [],
-        fuse: new Fuse([], {
+    select: React.useCallback(
+      (data) => ({
+        updates: data.updates,
+        fuse: new Fuse(data.updates, {
           minMatchCharLength: 3,
+          useExtendedSearch: true,
+          ignoreLocation: true,
+          includeMatches: true,
+          shouldSort: false,
           keys: ['text'],
         }),
-      },
+      }),
+      [],
+    ),
+    initialData: {
+      updates: [],
+      fuse: new Fuse([], {
+        minMatchCharLength: 3,
+        keys: ['text'],
+      }),
     },
-  )
+  })
 
   window.fuse = data.fuse
 

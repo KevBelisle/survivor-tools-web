@@ -18,64 +18,62 @@ const ShopArchives = () => {
   const location = useLocation()
   const isExactMatch = useMatch('/shop')
 
-  const { isLoading, isError, data, error } = useQuery(
-    'productList',
-    async () => {
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ['productList'],
+    queryFn: async () => {
       const { data } = await api.get('/products')
       return data
     },
-    {
-      select: React.useCallback(
-        (data) => ({
-          products: data.products,
-          fuse: new Fuse(data.products, {
-            minMatchCharLength: 3,
-            keys: ['title'],
-          }),
-          tags: data.products.reduce((tags, product) => {
-            product.currentTags
-              ?.map((x) => x.toLowerCase())
-              .forEach((tag) => {
-                if (!(tag in tags)) {
-                  tags[tag] = false
-                }
-              })
-            product.previousTags
-              ?.map((x) => x.toLowerCase())
-              .forEach((tag) => {
-                if (!(tag in tags)) {
-                  tags[tag] = false
-                }
-              })
-            return tags
-          }, {}),
-          types: data.products.reduce((types, product) => {
-            if (product.type && !(product.type.toLowerCase() in types)) {
-              types[product.type.toLowerCase()] = false
-            }
-            return types
-          }, {}),
-          states: data.products.reduce((states, product) => {
-            if (product.state && !(product.state.toLowerCase() in states)) {
-              states[product.state.toLowerCase()] = false
-            }
-            return states
-          }, {}),
-        }),
-        [],
-      ),
-      initialData: {
-        products: [],
-        fuse: new Fuse([], {
+    select: React.useCallback(
+      (data) => ({
+        products: data.products,
+        fuse: new Fuse(data.products, {
           minMatchCharLength: 3,
           keys: ['title'],
         }),
-        tags: [],
-        types: [],
-        states: [],
-      },
+        tags: data.products.reduce((tags, product) => {
+          product.currentTags
+            ?.map((x) => x.toLowerCase())
+            .forEach((tag) => {
+              if (!(tag in tags)) {
+                tags[tag] = false
+              }
+            })
+          product.previousTags
+            ?.map((x) => x.toLowerCase())
+            .forEach((tag) => {
+              if (!(tag in tags)) {
+                tags[tag] = false
+              }
+            })
+          return tags
+        }, {}),
+        types: data.products.reduce((types, product) => {
+          if (product.type && !(product.type.toLowerCase() in types)) {
+            types[product.type.toLowerCase()] = false
+          }
+          return types
+        }, {}),
+        states: data.products.reduce((states, product) => {
+          if (product.state && !(product.state.toLowerCase() in states)) {
+            states[product.state.toLowerCase()] = false
+          }
+          return states
+        }, {}),
+      }),
+      [],
+    ),
+    initialData: {
+      products: [],
+      fuse: new Fuse([], {
+        minMatchCharLength: 3,
+        keys: ['title'],
+      }),
+      tags: [],
+      types: [],
+      states: [],
     },
-  )
+  })
 
   const [searchTerm, setSearchTerm] = useState('')
 

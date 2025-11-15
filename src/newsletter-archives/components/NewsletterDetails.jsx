@@ -23,9 +23,12 @@ const NewsletterDetails = ({ newsletterId, filteredNewsletters }) => {
     isError,
     data: newsletter,
     error,
-  } = useQuery(['newsletter', newsletterId], async () => {
-    const { data } = await api.get(`/newsletter/${newsletterId}`)
-    return data
+  } = useQuery({
+    queryKey: ['newsletter', newsletterId],
+    queryFn: async () => {
+      const { data } = await api.get(`/newsletter/${newsletterId}`)
+      return data
+    },
   })
 
   function dangerousHtml() {

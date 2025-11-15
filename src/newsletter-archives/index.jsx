@@ -19,36 +19,34 @@ const NewsletterArchives = () => {
   const location = useLocation()
   const isExactMatch = useMatch('/newsletter')
 
-  const { isLoading, isError, data, error } = useQuery(
-    'newsletterList',
-    async () => {
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ['newsletterList'],
+    queryFn: async () => {
       const { data } = await api.get('/newsletters')
       return data
     },
-    {
-      select: React.useCallback(
-        (data) => ({
-          newsletters: data.newsletters,
-          fuse: new Fuse(data.newsletters, {
-            minMatchCharLength: 3,
-            useExtendedSearch: true,
-            ignoreLocation: true,
-            includeMatches: true,
-            shouldSort: false,
-            keys: ['text'],
-          }),
-        }),
-        [],
-      ),
-      initialData: {
-        newsletters: [],
-        fuse: new Fuse([], {
+    select: React.useCallback(
+      (data) => ({
+        newsletters: data.newsletters,
+        fuse: new Fuse(data.newsletters, {
           minMatchCharLength: 3,
+          useExtendedSearch: true,
+          ignoreLocation: true,
+          includeMatches: true,
+          shouldSort: false,
           keys: ['text'],
         }),
-      },
+      }),
+      [],
+    ),
+    initialData: {
+      newsletters: [],
+      fuse: new Fuse([], {
+        minMatchCharLength: 3,
+        keys: ['text'],
+      }),
     },
-  )
+  })
 
   window.fuse = data.fuse
 

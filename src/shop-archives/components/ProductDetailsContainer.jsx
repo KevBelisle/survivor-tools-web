@@ -28,7 +28,10 @@ function ProductDetailsContainer({ productId, filteredProducts }) {
     isError,
     data: product,
     error,
-  } = useQuery(['product', productId], () => fetchProduct(productId))
+  } = useQuery({
+    queryKey: ['product', productId],
+    queryFn: () => fetchProduct(productId),
+  })
 
   const [prevProduct, nextProduct] = useMemo(() => {
     const index = filteredProducts.findIndex(
@@ -46,12 +49,14 @@ function ProductDetailsContainer({ productId, filteredProducts }) {
 
   const showNextPrevLabels = useBreakpointValue({ base: false, md: true })
 
-  useQueryClient().prefetchQuery(['product', prevProduct?.id], () =>
-    fetchProduct(prevProduct?.id),
-  )
-  useQueryClient().prefetchQuery(['product', nextProduct?.id], () =>
-    fetchProduct(nextProduct?.id),
-  )
+  useQueryClient().prefetchQuery({
+    queryKey: ['product', prevProduct?.id],
+    queryFn: () => fetchProduct(prevProduct?.id),
+  })
+  useQueryClient().prefetchQuery({
+    queryKey: ['product', nextProduct?.id],
+    queryFn: () => fetchProduct(nextProduct?.id),
+  })
 
   return (
     <Container>
