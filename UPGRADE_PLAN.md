@@ -1,201 +1,136 @@
-# Upgrade Plan: Chakra UI 1.x + React 17 → Chakra UI 3.x + React 19
+# Upgrade Plan: React 18 → React 19 + Dependency Modernization
 
 ## Overview
 
 This document outlines the complete upgrade path from:
-- **React 17.0.2** → **React 19.0.0**
-- **Chakra UI 1.5.1** → **Chakra UI 3.x**
-- **React Router 5.2.0** → **React Router 6.x**
+- **React 18.2.0** → **React 19.0.0**
+- **Chakra UI 2.8.2** → **Chakra UI 3.x**
+- **React Router 5.3.4** → **React Router 7.x**
 - **React Query 3.15.2** → **TanStack Query 5.x**
 
-**Total Estimated Time: 13-20 days**
+**Status:** Phase 1 Complete ✓ | Phase 2 In Progress
 
 ---
 
-## Current State
+## Current State (After Phase 1)
 
 ### Current Dependencies
 ```json
 {
-  "react": "^17.0.2",
-  "react-dom": "^17.0.2",
-  "@chakra-ui/react": "^1.5.1",
-  "@emotion/react": "^11.1.5",
-  "@emotion/styled": "^11.3.0",
-  "framer-motion": "^4.1.4",
-  "react-router-dom": "^5.2.0",
+  "react": "^18.2.0",
+  "react-dom": "^18.2.0",
+  "@chakra-ui/react": "^2.8.2",
+  "@emotion/react": "^11.11.0",
+  "@emotion/styled": "^11.11.0",
+  "framer-motion": "^6.5.1",
+  "react-router-dom": "^5.3.4",
   "history": "^5.0.0",
   "react-query": "^3.15.2",
+  "react-icons": "^4.2.0",
+  "@microsoft/applicationinsights-react-js": "^3.1.2",
+  "react-responsive-masonry": "^2.1.2",
+  "simple-react-lightbox": "^3.6.6",
+  "use-is-in-viewport": "^1.0.9",
   "axios": "^0.21.1",
-  "vite": "^2.9.18"
-}
-```
-
-### Chakra UI Usage
-- **ChakraProvider** with custom theme
-- **Custom breakpoints** using `createBreakpoints`
-- **Custom Container** component configuration
-- **Color mode** used extensively (18 files)
-- **Common components:** Box, Container, Flex, Text, Input, Button, etc.
-- **520 Chakra component instances** across 29 files
-
----
-
-## Recommended Approach: 3-Phase Staged Migration
-
-### Why Staged?
-- Too many breaking changes to do at once
-- Easier to debug issues
-- Can test each upgrade separately
-- Lower risk of breaking production
-
----
-
-## PHASE 1: React 18 + Chakra UI 2.x
-
-**Estimated Time: 2-3 days**
-
-### Dependencies to Update
-
-```json
-{
-  "react": "^18.3.1",
-  "react-dom": "^18.3.1",
-  "@chakra-ui/react": "^2.8.2",
-  "@emotion/react": "^11.13.0",
-  "@emotion/styled": "^11.13.0",
-  "framer-motion": "^11.11.0",
   "vite": "^5.4.0",
   "@vitejs/plugin-react": "^4.3.0"
 }
 ```
 
-### Code Changes Required
-
-#### 1. Update `src/index.jsx`
-
-**Before:**
-```javascript
-import ReactDOM from 'react-dom';
-
-ReactDOM.render(
-  <React.StrictMode>
-    <AppConfiguration />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
-```
-
-**After:**
-```javascript
-import { createRoot } from 'react-dom/client';
-
-const root = createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <AppConfiguration />
-  </React.StrictMode>
-);
-```
-
-#### 2. Fix Chakra UI 2.x Breaking Changes
-
-- Search for `isTruncated` prop → Replace with `noOfLines={1}`
-- Review any custom `_focus` styles (may need `_focusVisible`)
-
-#### 3. Testing Checklist
-
-- [ ] All routes load correctly
-- [ ] Color mode toggle works (light/dark)
-- [ ] All forms and inputs work
-- [ ] API calls and data fetching work
-- [ ] No console errors or warnings
-- [ ] Responsive breakpoints work correctly
-- [ ] Test all 18 files using `useColorModeValue`
-
-### Steps
-
-1. Create branch: `git checkout -b upgrade/phase-1-react-18-chakra-2`
-2. Update `package.json` dependencies
-3. Run: `yarn install`
-4. Update `src/index.jsx` with createRoot
-5. Test thoroughly
-6. Fix any issues
-7. Create PR for review
+### Package Usage Analysis
+- **framer-motion**: Installed but NOT USED (0 imports) - can be removed
+- **simple-react-lightbox**: Used in 2 files (shop product gallery) - deprecated, needs replacement
+- **use-is-in-viewport**: Abandoned package (6 years old) - needs replacement
+- **react-query**: Used in 6 files - migrate to @tanstack/react-query
+- **react-router-dom**: Used in 8 files (useRouteMatch, useHistory, Switch, Route)
+- **@chakra-ui/react**: 29 files, 520 component instances
 
 ---
 
-## PHASE 2: React 19
+## PHASE 1: React 18 + Chakra UI 2.x ✅ COMPLETED
 
-**Estimated Time: 1-2 days**
+**Status:** ✅ Complete
 
-### Dependencies to Update
-
-```json
-{
-  "react": "^19.0.0",
-  "react-dom": "^19.0.0"
-}
-```
-
-### Breaking Changes
-
-- `ReactDOM.render` completely removed (already fixed in Phase 1)
-- `PropTypes` removed (we don't use this)
-- `defaultProps` removed for function components (check if used)
-- Legacy Context removed (we don't use this)
-- String refs removed (check if used)
-
-### Steps
-
-1. Create branch: `git checkout -b upgrade/phase-2-react-19`
-2. Update `package.json` dependencies
-3. Run: `yarn install`
-4. Run React 19 codemods (if available): Check https://docs.codemod.com/guides/migrations/react-18-19
-5. Search for any `defaultProps` usage and refactor
-6. Test thoroughly
-7. Create PR for review
-
-### Testing Checklist
-
-- [ ] All functionality from Phase 1 still works
-- [ ] No new console warnings
-- [ ] Performance is good (React 19 should improve this)
+### What Was Done
+- ✅ Upgraded React 17 → React 18.2.0
+- ✅ Upgraded Chakra UI 1.x → 2.8.2
+- ✅ Updated `src/index.jsx` to use `createRoot` API
+- ✅ Upgraded Vite to 5.4.0
+- ✅ Upgraded @vitejs/plugin-react to 4.3.0
+- ✅ Added `"type": "module"` to package.json
 
 ---
 
-## PHASE 3: Chakra UI 3.x + Router 6 + React Query 5
+## PHASE 2: React 19 Migration (3-Step Bridge Strategy)
 
-**Estimated Time: 5-7 days**
+**Total Estimated Time: 1-2 days**
 
-This phase has the most breaking changes. Consider breaking into sub-phases:
+### Why 3 Steps?
+
+Research has revealed that **true "bridge" versions (supporting both React 18 AND 19) are rare**. Most packages either:
+- Support React 18 only (older versions)
+- Support React 19 only (newer versions)
+- Have loose peer dependencies but may have issues
+
+**Strategy:** Upgrade to React 18/19-compatible versions first, then upgrade React itself, then address any remaining issues.
 
 ---
 
-### Sub-Phase 3A: React Query 3 → 5
+### Step 2A: Prepare Dependencies (Stay on React 18)
 
-**Estimated Time: 1 day**
+**Estimated Time: 6-8 hours**
 
-#### Dependencies
-
-**Remove:**
+#### Packages to REMOVE
 ```json
 {
-  "react-query": "^3.15.2",
-  "history": "^5.0.0"
+  "framer-motion": "^6.5.1",           // NOT USED - 0 imports found
+  "simple-react-lightbox": "^3.6.6",   // DEPRECATED - last update 2021
+  "use-is-in-viewport": "^1.0.9"       // ABANDONED - 6 years old
 }
 ```
 
-**Add:**
+#### Packages to UPGRADE (React 18/19 Compatible)
 ```json
 {
-  "@tanstack/react-query": "^5.62.0"
+  // Core dependencies - stay on React 18 for now
+  "react": "^18.2.0",
+  "react-dom": "^18.2.0",
+  
+  // Build tools - React 18/19 compatible
+  "vite": "^6.0.1",
+  "@vitejs/plugin-react": "^5.1.0",
+  
+  // UI & Styling - React 18 only (for now)
+  "@chakra-ui/react": "^2.8.2",
+  "@emotion/react": "^11.14.0",         // ⚠️ Works with React 19 but has issues
+  "@emotion/styled": "^11.14.1",        // ⚠️ Works with React 19 but has issues
+  
+  // Data fetching - migrate package name
+  "@tanstack/react-query": "^5.90.0",   // ✅ Works with React 18 & 19
+  // Remove: "react-query": "^3.15.2"
+  
+  // Routing - React 18/19 compatible
+  "react-router-dom": "^7.0.0",         // ✅ Explicitly designed for React 18→19 bridge
+  // Remove: "history": "^5.0.0"        // No longer needed
+  
+  // Icons - React 18/19 compatible
+  "react-icons": "^5.5.0",              // ✅ React 19 TypeScript fixes
+  
+  // Telemetry - version-locked to React version
+  "@microsoft/applicationinsights-react-js": "^18.3.6",  // Use v18 for React 18
+  
+  // Other dependencies
+  "react-responsive-masonry": "^2.7.1"
 }
 ```
 
-#### Code Changes
+#### Code Changes Required
 
-**Update all imports:**
+**1. Remove Lightbox (2 files)**
+- `src/shop-archives/components/ProductDetailsContainer.jsx` - Remove `<SimpleReactLightbox>` wrapper
+- `src/shop-archives/components/ProductDetails.jsx` - Replace lightbox with direct image links using `target="_blank"`
+
+**2. Migrate React Query (6 files)**
 ```javascript
 // Before
 import { useQuery, QueryClient, QueryClientProvider } from 'react-query';
@@ -204,57 +139,20 @@ import { useQuery, QueryClient, QueryClientProvider } from 'react-query';
 import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 ```
 
-**Update loading checks:**
+Files affected:
+- `src/index.jsx`
+- `src/kickstarter-archives/index.jsx`
+- `src/newsletter-archives/index.jsx`
+- `src/newsletter-archives/components/NewsletterDetails.jsx`
+- `src/shop-archives/index.jsx`
+- `src/shop-archives/components/ProductDetailsContainer.jsx`
+
+**3. Migrate React Router v5 → v7 (8 files)**
+
+**Main routing changes (`src/index.jsx`):**
 ```javascript
 // Before
-if (query.isLoading) { ... }
-
-// After
-if (query.isPending) { ... }
-// Note: new isLoading = isPending && isFetching
-```
-
-#### Steps
-
-1. Update `package.json`
-2. Run TanStack Query codemod (if available)
-3. Update all imports
-4. Update all `isLoading` → `isPending`
-5. Test all API calls and data fetching
-
----
-
-### Sub-Phase 3B: React Router 5 → 6
-
-**Estimated Time: 2-3 days**
-
-#### Dependencies
-
-**Remove:**
-```json
-{
-  "history": "^5.0.0"  // Already removed in 3A
-}
-```
-
-**Update:**
-```json
-{
-  "react-router-dom": "^6.28.0"
-}
-```
-
-#### Files Affected
-
-11 files with router imports need updates.
-
-#### Code Changes
-
-**1. Update Routes in `src/index.jsx`:**
-
-```javascript
-// Before
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 <Switch>
   <Route path="/newsletter">
@@ -263,21 +161,26 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
   <Route path="/kickstarter">
     <KickstarterArchives />
   </Route>
-  <Redirect from="/" to="/shop" />
+  <Route path="/shop">
+    <ShopArchives />
+  </Route>
+  <Route>
+    <Redirect to="/shop" />
+  </Route>
 </Switch>
 
 // After
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 <Routes>
-  <Route path="/newsletter" element={<NewsletterArchives />} />
-  <Route path="/kickstarter" element={<KickstarterArchives />} />
+  <Route path="/newsletter/*" element={<NewsletterArchives />} />
+  <Route path="/kickstarter/*" element={<KickstarterArchives />} />
+  <Route path="/shop/*" element={<ShopArchives />} />
   <Route path="/" element={<Navigate to="/shop" replace />} />
 </Routes>
 ```
 
-**2. Update Navigation:**
-
+**Replace useHistory with useNavigate (`src/components/AppHeader.jsx`):**
 ```javascript
 // Before
 import { useHistory } from 'react-router-dom';
@@ -290,302 +193,354 @@ const navigate = useNavigate();
 navigate('/path');
 ```
 
-**3. Update Links:**
+**Replace useRouteMatch with useMatch (7 files):**
+```javascript
+// Before
+import { useRouteMatch } from 'react-router-dom';
+const match = useRouteMatch();
+const { path, url } = match;
 
-Links (`Link` component) should continue to work, but verify.
+// After
+import { useMatch, useResolvedPath } from 'react-router-dom';
+const match = useMatch('/:section/*');  // Adjust pattern as needed
+const resolvedPath = useResolvedPath('.');
+```
 
-#### Steps
+Files with useRouteMatch:
+- `src/kickstarter-archives/index.jsx` (3 uses)
+- `src/newsletter-archives/index.jsx` (3 uses)
+- `src/shop-archives/index.jsx` (3 uses)
+- `src/kickstarter-archives/components/UpdateSummary.jsx` (2 uses)
+- `src/newsletter-archives/components/NewsletterSummary.jsx` (2 uses)
+- `src/newsletter-archives/components/NewsletterDetails.jsx` (1 use)
+- `src/shop-archives/components/ProductSummaryCard.jsx` (2 uses)
 
-1. Update `package.json`
-2. Update `src/index.jsx` routing
-3. Search for `useHistory` and replace with `useNavigate`
-4. Search for `Switch` and replace with `Routes`
-5. Search for `Redirect` and replace with `Navigate`
-6. Update all `<Route>` syntax
-7. Test all navigation and routing
+**4. Replace/Remove use-is-in-viewport**
+- Search for usage and replace with custom IntersectionObserver hook or alternative
+
+#### Testing Checklist
+- [ ] All routes load correctly
+- [ ] Navigation works (useNavigate)
+- [ ] Nested routes work correctly
+- [ ] Data fetching works (TanStack Query)
+- [ ] Image gallery shows direct links instead of lightbox
+- [ ] No console errors or warnings
+- [ ] All breakpoints still work
 
 ---
 
-### Sub-Phase 3C: Chakra UI 2.x → 3.x
+### Step 2B: Upgrade React to 19
 
-**Estimated Time: 4-5 days** (MOST COMPLEX)
+**Estimated Time: 1-2 hours**
 
-#### Dependencies
-
-**Remove:**
+#### Packages to Update
 ```json
 {
-  "@emotion/styled": "removed",
-  "framer-motion": "removed"
+  "react": "^19.0.0",
+  "react-dom": "^19.0.0",
+  "@microsoft/applicationinsights-react-js": "^19.3.8"  // Version-locked to React version
 }
 ```
 
-**Update:**
+#### Code Changes
+- Run React 19 codemod: `npx codemod@latest react/19/migration-recipe`
+- Run TypeScript types codemod: `npx types-react-codemod@latest preset-19 ./src`
+
+#### Testing Checklist
+- [ ] All functionality from Step 2A still works
+- [ ] No new console warnings
+- [ ] Performance is acceptable
+- [ ] Check for Chakra UI rendering issues
+
+---
+
+### Step 2C: Address Chakra UI Compatibility
+
+**Estimated Time: Variable (see options)**
+
+#### The Problem
+- **Chakra UI v2.8.2** officially supports React 18 only
+- **React 19 compatibility:** May work with `--legacy-peer-deps` but has known rendering issues (e.g., popovers)
+- **Chakra UI v3** supports React 19 but requires major migration
+
+#### Options
+
+**Option 1: Migrate to Chakra UI v3 Now (Recommended)**
+- **Time:** 2-4 days
+- **Effort:** High - theme rewrite, component prop changes
+- **Risk:** Medium - well-documented migration path
+- **See:** Phase 3 for detailed migration steps
+
+**Option 2: Use --legacy-peer-deps Temporarily**
+- **Time:** 0 hours
+- **Effort:** None - just install with flag
+- **Risk:** High - may encounter rendering bugs
+- **Recommendation:** Only if deferring Chakra v3 migration
+
+**Option 3: Switch to Alternative UI Library**
+- **Time:** 3-5 days
+- **Options:** Mantine, shadcn/ui, Material-UI
+- **Risk:** High - complete UI rewrite
+
+---
+
+## PHASE 3: Chakra UI v3 Migration
+
+**Estimated Time: 2-4 days**
+
+### Dependencies to Update
+
 ```json
 {
-  "@chakra-ui/react": "^3.29.0",
-  "@emotion/react": "^11.13.0"
+  "@chakra-ui/react": "^3.0.0"
+  // Remove: "@emotion/styled" (no longer needed)
+  // Remove: "framer-motion" (no longer needed, already removed)
 }
 ```
 
-#### Major Breaking Changes
+**Note:** Chakra UI v3 no longer requires `@emotion/styled` or `framer-motion` as dependencies.
 
-1. **Theme system completely rewritten**
-2. **Many component props renamed**
-3. **No framer-motion animations**
-4. **No @emotion/styled**
+### Major Breaking Changes
 
-#### Critical File: `src/index.jsx` Theme Configuration
+1. **Theme System Completely Rewritten**
+   - `extendTheme` → `createSystem`
+   - Breakpoints syntax changed
+   - Component customization uses "recipes" instead of "components"
 
-**Before:**
+2. **Component Props Renamed**
+   - Boolean props: `is<X>` → `<x>` (e.g., `isTruncated` → `truncated`)
+   - `noOfLines` → `lineClamp`
+   - Check docs for full list
+
+3. **Provider Changes**
+   - `<ChakraProvider theme={theme}>` → `<ChakraProvider value={system}>`
+
+### Critical File: `src/index.jsx` Theme Configuration
+
+**Before (Chakra UI v2):**
 ```javascript
-import { ChakraProvider, extendTheme, ColorModeScript } from '@chakra-ui/react';
-import { createBreakpoints } from '@chakra-ui/theme-tools';
-
-const breakpoints = createBreakpoints({
-  sm: '724px',
-  md: '1064px',
-  lg: '1280px',
-  xl: '1920px',
-  '2xl': '2560px',
-});
+import { ChakraProvider, ColorModeScript, extendTheme } from '@chakra-ui/react'
 
 const config = {
   initialColorMode: 'light',
   useSystemColorMode: false,
-};
-
-const theme = extendTheme({
-  config,
-  breakpoints,
+  breakpoints: {
+    sm: '724px',
+    md: '1064px',
+    lg: '1404px',
+    xl: '1744px',
+    '2xl': '2084px',
+  },
   components: {
     Container: {
       baseStyle: {
-        px: 0,
+        px: '0',
+        maxWidth: {
+          base: '320px',
+          sm: '660px',
+          md: '1000px',
+          lg: '1340px',
+          xl: '1680px',
+          '2xl': '2020px',
+        },
       },
     },
   },
-});
+}
+const theme = extendTheme(config)
 
-<ChakraProvider theme={theme}>
-  <App />
+<ChakraProvider resetCSS={true} theme={theme}>
+  {/* app */}
 </ChakraProvider>
 ```
 
-**After:**
+**After (Chakra UI v3):**
 ```javascript
-import { ChakraProvider, createSystem, defaultConfig } from '@chakra-ui/react';
+import { ChakraProvider, createSystem, defaultConfig } from '@chakra-ui/react'
 
 const system = createSystem(defaultConfig, {
   theme: {
     breakpoints: {
-      sm: { value: '724px' },
-      md: { value: '1064px' },
-      lg: { value: '1280px' },
-      xl: { value: '1920px' },
-      '2xl': { value: '2560px' },
+      sm: '724px',
+      md: '1064px',
+      lg: '1404px',
+      xl: '1744px',
+      '2xl': '2084px',
     },
-    recipes: {
-      container: {
-        base: {
-          px: { value: '0' },
+    tokens: {
+      // Color mode and other tokens
+    },
+  },
+  recipes: {
+    container: {
+      base: {
+        px: 0,
+        maxWidth: {
+          base: '320px',
+          sm: '660px',
+          md: '1000px',
+          lg: '1340px',
+          xl: '1680px',
+          '2xl': '2020px',
         },
       },
     },
   },
   globalCss: {
-    'html': {
-      colorMode: 'light',
+    html: {
+      colorPalette: 'light',
     },
   },
-});
+})
 
 <ChakraProvider value={system}>
-  <App />
+  {/* app */}
 </ChakraProvider>
 ```
 
-#### Component Prop Changes
+### Files to Update (29 files with Chakra components)
 
-Common prop renames (check Chakra UI 3.x docs for complete list):
-- `isTruncated` → `truncated`
-- `noOfLines` → `lineClamp`
-- Boolean props: `is<X>` → `<x>` pattern
-
-#### Files to Update
-
-All 29 files with Chakra components:
-- Review each component usage
-- Update prop names
-- Test thoroughly
-
-#### Steps
-
-1. Update `package.json`
-2. Completely rewrite theme configuration in `src/index.jsx`
-3. Update `ChakraProvider` usage
-4. Update `ColorModeScript` if needed
-5. Go through each of 29 component files:
-   - Update prop names
-   - Test component rendering
-   - Check color mode works
-6. Test all breakpoints
-7. Test all color mode functionality (18 files)
-8. Extensive visual testing of entire app
-
-#### Testing Priority
-
-High-risk files (use `useColorModeValue`):
+Must review all component prop usage:
 - `src/components/AppHeader.jsx`
 - `src/components/AppVersion.jsx`
 - All shop-archives components
 - All newsletter-archives components
 - All kickstarter-archives components
 
----
-
-### Sub-Phase 3D: Update Remaining Dependencies
-
-**Estimated Time: 1 day**
-
-#### Dependencies
-
-```json
-{
-  "axios": "^1.8.2",  // Security update from 0.21.1
-  "react-icons": "^5.3.0",
-  "vite": "^6.0.0",
-  "chart.js": "^4.4.0",
-  "react-chartjs-2": "^5.3.0",
-  "date-fns": "^4.1.0",
-  "fuse.js": "^7.0.0",
-  "@testing-library/react": "^16.0.0",
-  "@testing-library/jest-dom": "^6.6.0",
-  "@testing-library/user-event": "^14.5.0"
-}
-```
-
-#### Check Compatibility
-
-These may need investigation:
-- `@microsoft/applicationinsights-react-js`: Check React 19 support
-- `simple-react-lightbox`: May need React 19 compatible alternative
-- `react-responsive-masonry`: Verify React 19 compatibility
-
-#### Steps
-
-1. Update `package.json` with all remaining updates
-2. Run: `yarn install`
-3. Test for compatibility issues
-4. Fix any breaking changes
-5. Run full test suite
+### Testing Checklist
+- [ ] All components render correctly
+- [ ] Color mode toggle works
+- [ ] All breakpoints work
+- [ ] All custom theme settings apply
+- [ ] No console errors
 
 ---
 
-## Alternative Approach: Stay on Chakra UI 2.x
+## Package Compatibility Research Summary
 
-Chakra UI 2.x supports React 19, so you could:
-1. Do Phase 1 & 2 (React 18 → 19 + Chakra 2.x)
-2. Stay on Chakra 2.x indefinitely (still maintained)
-3. Upgrade to Chakra 3.x later when ready
+### ✅ Packages with React 18/19 Bridge Support
+- **@tanstack/react-query v5.x** - Works with both
+- **react-router-dom v7.x** - Explicitly designed for React 18→19 migration
+- **vite v5.x & v6.x** - Both work with React 18 & 19
+- **@vitejs/plugin-react v5.x** - React 19 support
+- **react-icons v5.5.0+** - React 19 TypeScript fixes
 
-**Pros:**
-- Less work upfront
-- Chakra 2.x is stable and maintained
-- Can focus on React 19 benefits first
+### ❌ No Bridge Version - Version Locked
+- **Chakra UI** - v2 (React 18 only), v3 (React 19+)
+- **@microsoft/applicationinsights-react-js** - Version number matches React version (v18.x for React 18, v19.x for React 19)
 
-**Cons:**
-- Eventually need to migrate to Chakra 3.x
-- Missing Chakra 3.x improvements (smaller bundle, better performance)
+### ⚠️ Works But Has Known Issues
+- **@emotion/react v11.14.0** - TypeScript type conflicts with React 19
+- **@emotion/styled v11.14.1** - Ref handling bugs with React 19
 
----
-
-## Risk Assessment
-
-### High Risk Areas
-- **Theme configuration** - Complete rewrite needed
-- **Routing** - 11 files need updates
-- **Color mode** - 18 files use color mode hooks
-- **Custom breakpoints** - Must migrate to new format
-
-### Medium Risk Areas
-- **React Query** - Package rename and API changes
-- **Third-party libraries** - May need React 19 updates
-
-### Low Risk Areas
-- **React Icons** - Should work with update
-- **Axios** - Backward compatible
-- **Chart.js** - Should work with update
+### 🗑️ Packages to Remove
+- **framer-motion** - Not used (0 imports)
+- **simple-react-lightbox** - Deprecated (2021), replace with direct links
+- **use-is-in-viewport** - Abandoned (6 years old)
+- **history** - No longer needed with React Router v7
 
 ---
 
-## Testing Strategy
+## Known Issues & Caveats
 
-For each phase:
+### Chakra UI v2 with React 19
+- **Not officially supported**
+- Known issues: Popover positioning bugs, potential rendering glitches
+- Workaround: Use `--legacy-peer-deps` or `--force` during installation
+- **Recommendation:** Migrate to Chakra UI v3 for full React 19 support
 
-1. **Unit Tests**: Update and run all tests
-2. **Visual Testing**: Manually check all pages
-3. **Color Mode**: Test light/dark mode on all pages
-4. **Responsive**: Test all breakpoints (sm, md, lg, xl, 2xl)
-5. **Forms**: Test all inputs and interactions
-6. **Navigation**: Test all routes and links
-7. **API Calls**: Ensure data fetching works
-8. **Performance**: Check for performance regressions
+### Emotion Packages with React 19
+- TypeScript type conflicts when using styled components
+- Ref forwarding issues in some cases
+- **Status:** Works but may require `@ts-ignore` in some places
+- **Note:** Chakra UI v3 removes @emotion/styled dependency
 
----
-
-## Migration Tools & Codemods
-
-- **React 19**: Check https://docs.codemod.com/guides/migrations/react-18-19
-- **TanStack Query**: Codemod available in package
-- **React Router**: No official codemod, manual migration
-- **Chakra UI 3.x**: **NO CODEMODS** - manual migration required
+### React Router v7
+- Major breaking changes from v5
+- `useRouteMatch` removed - use `useMatch` with explicit paths
+- Nested routes require `/*` in parent route paths
+- No more `component` or `render` props - use `element` only
 
 ---
 
 ## Timeline Summary
 
-| Phase | Task | Estimated Time |
-|-------|------|----------------|
-| 1 | React 18 + Chakra 2.x | 2-3 days |
-| 2 | React 19 | 1-2 days |
-| 3A | React Query 5 | 1 day |
-| 3B | React Router 6 | 2-3 days |
-| 3C | Chakra UI 3.x | 4-5 days |
-| 3D | Other dependencies | 1 day |
-| - | Testing & bug fixes | 2-3 days buffer |
-| **Total** | | **13-20 days** |
+| Phase | Task | Status | Estimated Time |
+|-------|------|--------|----------------|
+| 1 | React 18 + Chakra 2.x | ✅ Complete | ~2-3 days |
+| 2A | Prepare dependencies | 🔄 Pending | 6-8 hours |
+| 2B | Upgrade React to 19 | 🔄 Pending | 1-2 hours |
+| 2C | Address Chakra UI | 🔄 Pending | 0-4 days |
+| 3 | Chakra UI v3 (if not done in 2C) | 🔄 Pending | 2-4 days |
+| - | Testing & bug fixes | 🔄 Ongoing | 1-2 days buffer |
+| **Total** | | | **~7-12 days** |
+
+---
+
+## Migration Tools & Codemods
+
+### React 19
+```bash
+# Comprehensive migration
+npx codemod@latest react/19/migration-recipe
+
+# TypeScript types migration
+npx types-react-codemod@latest preset-19 ./src
+```
+
+### TanStack Query
+- Migration guide: https://tanstack.com/query/latest/docs/framework/react/guides/migrating-to-v5
+- Mostly import path changes
+
+### React Router
+- No official codemod
+- Manual migration required
+- Guide: https://reactrouter.com/en/main/upgrading/v5
+
+### Chakra UI v3
+- **NO CODEMODS AVAILABLE**
+- Manual migration required
+- Migration guide: https://www.chakra-ui.com/docs/get-started/migration
 
 ---
 
 ## Rollback Plan
 
-For each phase:
+For each step:
 1. Work on separate branch
-2. Create PR for review before merging
-3. Can revert merge commit if issues found
-4. Keep old dependencies documented
-5. Tag releases after each phase
+2. Commit frequently
+3. Create PR for review before merging
+4. Can revert merge commit if issues found
+5. Keep old package.json as reference
+6. Tag releases after each phase
 
 ---
 
 ## Resources
 
+### Official Documentation
+- [React 19 Release](https://react.dev/blog/2024/12/05/react-19)
 - [React 19 Upgrade Guide](https://react.dev/blog/2024/04/25/react-19-upgrade-guide)
-- [Chakra UI v3 Migration Guide](https://www.chakra-ui.com/docs/get-started/migration)
-- [React Router v6 Migration](https://reactrouter.com/en/main/upgrading/v5)
+- [Chakra UI v3 Migration](https://www.chakra-ui.com/docs/get-started/migration)
+- [React Router v7 Docs](https://reactrouter.com/)
 - [TanStack Query v5 Migration](https://tanstack.com/query/latest/docs/framework/react/guides/migrating-to-v5)
+
+### GitHub Issues & Discussions
+- [Chakra UI React 19 Support](https://github.com/chakra-ui/chakra-ui/issues/8519)
+- [Emotion React 19 Issues](https://github.com/emotion-js/emotion/issues/3186)
+- [Framer Motion React 19](https://github.com/framer/motion/issues/2668)
 
 ---
 
-## Notes
+## Recommendations
 
-- This is a **major upgrade** with significant breaking changes
-- Staged approach is **strongly recommended**
-- Most complex part is Chakra UI 3.x theme rewrite
-- Budget extra time for testing and bug fixes
-- Consider whether immediate Chakra 3.x upgrade is necessary
+1. **Start with Step 2A** - Get all dependencies to React 18/19 compatible versions first
+2. **Test thoroughly** after each step - don't batch changes
+3. **Consider Chakra UI v3 migration** as part of Phase 2C - better to do it once
+4. **Budget extra time** for testing and unexpected issues
+5. **Use feature branches** for each step - makes rollback easier
 
 ---
 
 *Last Updated: 2025-11-14*
+*Phase 1: Complete ✅ | Phase 2: Ready to Begin*
