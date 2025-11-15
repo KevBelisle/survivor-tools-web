@@ -66,7 +66,7 @@ function ProductDetailsContainer({ productId, filteredProducts }) {
         }
       >
         {filteredProducts.length >= 3 ? (
-          <Link to={`./${prevProduct?.id}`}>
+          <Link to={`../${prevProduct?.id}`}>
             <Button
               leftIcon={<Icon as={HiChevronLeft} />}
               roundedTop={0}
@@ -79,7 +79,7 @@ function ProductDetailsContainer({ productId, filteredProducts }) {
           <></>
         )}
         {filteredProducts.length >= 2 ? (
-          <Link to={`./${nextProduct?.id}`}>
+          <Link to={`../${nextProduct?.id}`}>
             <Button
               rightIcon={<Icon as={HiChevronRight} />}
               roundedTop={0}
