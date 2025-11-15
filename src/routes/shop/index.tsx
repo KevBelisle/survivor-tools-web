@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { fetchProducts } from "@/services/shop";
+import { Container, Heading, VStack, Box } from "@chakra-ui/react";
 
 export const Route = createFileRoute("/shop/")({
   loader: ({ context: { queryClient } }) => {
@@ -19,12 +20,15 @@ function RouteComponent() {
   });
 
   return (
-    <ul>
-      {data.products.map((product) => (
-        <li key={product.id}>
+    <Container maxW="container.lg" py={8}>
+      <Heading as="h1" size="2xl" mb={6}>
+        Products
+      </Heading>
+      <VStack gap={2}>
+        {data.products.map((product) => (
           <Link to={`/shop/${product.id}`}>{product.title}</Link>
-        </li>
-      ))}
-    </ul>
+        ))}
+      </VStack>
+    </Container>
   );
 }

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a modern React web application built with TanStack Router, TanStack Query, and Tailwind CSS. The project was created using `create-tsrouter-app` and uses a file-based routing system.
+This is a modern React web application built with TanStack Router, TanStack Query, and Chakra UI. The project was created using `create-tsrouter-app` and uses a file-based routing system.
 
 ## Development Commands
 
@@ -43,10 +43,12 @@ The project uses **TanStack Router** with file-based routing:
 - The router context includes the `queryClient` for use in route loaders and components
 - TanStack Router loaders can be used for route-level data fetching
 
-### Styling
-- **Tailwind CSS v4** is configured via Vite plugin
-- Global styles in `src/styles.css`
-- Tailwind configuration is handled through the Vite plugin, not a separate config file
+### Styling & UI Components
+- **Chakra UI v3** is the primary UI component library and design system
+- Chakra provider is configured in `src/integrations/chakra-ui/provider.tsx`
+- Theme system is defined in `src/integrations/chakra-ui/system.ts` (uses default config)
+- The Chakra provider wraps the entire app in `src/routes/__root.tsx`
+- Global styles can be added in `src/styles.css` if needed
 
 ### Build Tools
 - **Vite** as the build tool and dev server
@@ -75,14 +77,25 @@ These are only included in development builds.
 src/
 ├── components/         # Reusable React components
 ├── integrations/       # Third-party integration setup
+│   ├── chakra-ui/     # Chakra UI configuration
+│   │   ├── provider.tsx  # Chakra provider component
+│   │   └── system.ts     # Theme system configuration
 │   └── tanstack-query/ # TanStack Query configuration
 ├── routes/            # File-based routes (TanStack Router)
-│   ├── __root.tsx     # Root layout with devtools
+│   ├── __root.tsx     # Root layout with devtools and providers
 │   └── index.tsx      # Home page route
 ├── main.tsx           # Application entry point
 ├── routeTree.gen.ts   # Auto-generated route tree (DO NOT EDIT)
-└── styles.css         # Global Tailwind styles
+└── styles.css         # Global styles
 ```
+
+## Code Style Guidelines
+
+### No Barrel Files
+- **DO NOT** create or use barrel files (index.ts/index.tsx files that re-export from other modules)
+- Always import directly from the source file
+- Example: Use `import { ChakraUIProvider } from '@/integrations/chakra-ui/provider'` instead of `import { ChakraUIProvider } from '@/integrations/chakra-ui'`
+- This improves build performance and makes dependencies more explicit
 
 ## Important Notes
 
