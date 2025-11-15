@@ -1,12 +1,12 @@
-import { Box, Tag, Text } from '@chakra-ui/react'
-import React from 'react'
-import { Link } from 'react-router-dom'
+import { Box, Tag, Text } from "@chakra-ui/react";
+import React from "react";
+import { Link } from "react-router-dom";
 
-import useClampedIsInViewport from '../../hooks/useClampedIsInViewport'
+import useClampedIsInViewport from "../../hooks/useClampedIsInViewport";
 
 const tags = {
   inStock: (
-    <Tag
+    <Tag.Root
       size="sm"
       colorScheme="green"
       float="right"
@@ -15,10 +15,10 @@ const tags = {
       variant="solid"
     >
       In Stock
-    </Tag>
+    </Tag.Root>
   ),
   outOfStock: (
-    <Tag
+    <Tag.Root
       size="sm"
       colorScheme="red"
       float="right"
@@ -27,10 +27,10 @@ const tags = {
       variant="solid"
     >
       Out Of Stock
-    </Tag>
+    </Tag.Root>
   ),
   unlisted: (
-    <Tag
+    <Tag.Root
       size="sm"
       colorScheme="gray"
       float="right"
@@ -39,13 +39,13 @@ const tags = {
       variant="solid"
     >
       Unlisted
-    </Tag>
+    </Tag.Root>
   ),
-}
+};
 
 const ProductSummaryCard = ({ product }) => {
-  const tag = product.state ? tags[product.state] : <></>
-  const [hasBeenInViewport, targetRef] = useClampedIsInViewport()
+  const tag = product.state ? tags[product.state] : <></>;
+  const [hasBeenInViewport, targetRef] = useClampedIsInViewport();
 
   return (
     <Box
@@ -65,21 +65,21 @@ const ProductSummaryCard = ({ product }) => {
           backgroundImage={
             hasBeenInViewport
               ? `url('https://archives.survivor.tools/images/${product.image.uri}')`
-              : ''
+              : ""
           }
           backgroundSize="cover"
           borderBottomStyle="solid"
           borderBottomWidth="1px"
-          borderBottomColor={{ base: 'gray.300', _dark: 'black' }}
+          borderBottomColor={{ base: "gray.300", _dark: "black" }}
           backgroundColor="white"
         />
-        <Box py="2" px="4" bg={{ base: 'gray.100', _dark: 'gray.800' }}>
+        <Box py="2" px="4" bg={{ base: "gray.100", _dark: "gray.800" }}>
           {tag}
           <Text fontWeight="semibold">{product.title}</Text>
         </Box>
       </Link>
     </Box>
-  )
-}
+  );
+};
 
-export default ProductSummaryCard
+export default ProductSummaryCard;

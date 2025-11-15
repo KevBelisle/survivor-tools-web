@@ -9,8 +9,8 @@ import {
   VStack,
   Wrap,
   WrapItem,
-} from '@chakra-ui/react'
-import React from 'react'
+} from "@chakra-ui/react";
+import React from "react";
 
 function ProductDetailsSkeleton() {
   return (
@@ -21,10 +21,10 @@ function ProductDetailsSkeleton() {
         </Skeleton>
         <HStack>
           <Skeleton>
-            <Tag>Fake tag</Tag>
+            <Tag.Root>Fake tag</Tag.Root>
           </Skeleton>
           <Skeleton>
-            <Tag>Fake tag</Tag>
+            <Tag.Root>Fake tag</Tag.Root>
           </Skeleton>
         </HStack>
         <Box shadow="base" rounded="md">
@@ -32,7 +32,7 @@ function ProductDetailsSkeleton() {
             px="4"
             py="4"
             roundedTop="md"
-            bg={{ base: 'white', _dark: 'gray.900' }}
+            bg={{ base: "white", _dark: "gray.900" }}
           >
             <SkeletonText
               pl="8"
@@ -47,16 +47,16 @@ function ProductDetailsSkeleton() {
             px="4"
             py="4"
             roundedBottom="md"
-            bg={{ base: 'gray.100', _dark: 'gray.800' }}
+            bg={{ base: "gray.100", _dark: "gray.800" }}
           >
             <Wrap
               spacing={{
-                base: '16px',
-                sm: '38px',
-                md: '16px',
-                lg: '24px',
-                xl: '16px',
-                '2xl': '21px',
+                base: "16px",
+                sm: "38px",
+                md: "16px",
+                lg: "24px",
+                xl: "16px",
+                "2xl": "21px",
               }}
             >
               <WrapItem>
@@ -79,7 +79,7 @@ function ProductDetailsSkeleton() {
         </Box>
       </VStack>
     </>
-  )
+  );
 }
 
-export default ProductDetailsSkeleton
+export default ProductDetailsSkeleton;

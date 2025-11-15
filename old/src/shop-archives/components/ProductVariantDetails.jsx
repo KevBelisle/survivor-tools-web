@@ -9,15 +9,15 @@ import {
   Tag,
   Text,
   useBreakpointValue,
-} from '@chakra-ui/react'
-import React from 'react'
-import { HiInformationCircle } from 'react-icons/hi'
+} from "@chakra-ui/react";
+import React from "react";
+import { HiInformationCircle } from "react-icons/hi";
 
-import ProductVariantStockGraph from './ProductVariantStockGraph'
+import ProductVariantStockGraph from "./ProductVariantStockGraph";
 
 const ProductVariantDetails = ({ variant, listed }) => {
   const stockGraph = (
-    <Box px="4" py="4" bg={{ base: 'gray.100', _dark: 'gray.900' }}>
+    <Box px="4" py="4" bg={{ base: "gray.100", _dark: "gray.900" }}>
       {variant.stockHistory.length >= 6 ? (
         <Box minHeight="300px">
           <ProductVariantStockGraph stockHistory={variant.stockHistory} />
@@ -28,47 +28,47 @@ const ProductVariantDetails = ({ variant, listed }) => {
         </Center>
       )}
     </Box>
-  )
-  const showGraph = useBreakpointValue({ base: false, sm: true })
+  );
+  const showGraph = useBreakpointValue({ base: false, sm: true });
 
-  const lastKnownPrice = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(variant.priceHistory[0].price)
+  const lastKnownPrice = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(variant.priceHistory[0].price);
 
-  const maxPrice = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  const maxPrice = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
   }).format(
     Math.max.apply(
       null,
-      variant.priceHistory.map((x) => x.price)
-    )
-  )
-  const minPrice = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+      variant.priceHistory.map((x) => x.price),
+    ),
+  );
+  const minPrice = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
   }).format(
     Math.min.apply(
       null,
-      variant.priceHistory.map((x) => x.price)
-    )
-  )
+      variant.priceHistory.map((x) => x.price),
+    ),
+  );
 
   return (
     <SimpleGrid
-      templateColumns={{ base: 'auto', sm: 'auto', md: '350px auto' }}
+      templateColumns={{ base: "auto", sm: "auto", md: "350px auto" }}
       spacing={0}
       rounded="md"
       shadow="base"
       overflow="hidden"
     >
-      <Box px="4" py="4" bg={{ base: 'white', _dark: 'gray.800' }}>
+      <Box px="4" py="4" bg={{ base: "white", _dark: "gray.800" }}>
         <Text fontWeight="semibold">{variant.details.title}</Text>
         <Text fontSize="sm" color="gray.400">
           {variant.details.sku}
         </Text>
-        <HStack mt={{ base: '4', md: '8' }}>
+        <HStack mt={{ base: "4", md: "8" }}>
           <Stat.Root>
             <Stat.Label>Last known price</Stat.Label>
             <Stat.ValueText>
@@ -113,9 +113,9 @@ const ProductVariantDetails = ({ variant, listed }) => {
               {listed ? (
                 variant.stockHistory[0].stock
               ) : (
-                <Tag size="md" colorScheme="gray" variant="solid" mt={2}>
+                <Tag.Root size="md" colorScheme="gray" variant="solid" mt={2}>
                   Unlisted
-                </Tag>
+                </Tag.Root>
               )}
             </Stat.ValueText>
           </Stat.Root>
@@ -123,10 +123,10 @@ const ProductVariantDetails = ({ variant, listed }) => {
       </Box>
       {showGraph ? stockGraph : <></>}
     </SimpleGrid>
-  )
-}
+  );
+};
 
-export default ProductVariantDetails
+export default ProductVariantDetails;
 
 // {maxPrice == minPrice ? (
 //   <></>

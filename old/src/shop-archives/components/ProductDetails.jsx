@@ -10,18 +10,18 @@ import {
   Wrap,
   WrapItem,
   Center,
-} from '@chakra-ui/react'
-import React, { useState, useMemo } from 'react'
+} from "@chakra-ui/react";
+import React, { useState, useMemo } from "react";
 import {
   HiChevronDoubleDown,
   HiChevronDoubleUp,
   HiOutlineShoppingCart,
-} from 'react-icons/hi'
+} from "react-icons/hi";
 
-import ProductVariantDetails from './ProductVariantDetails'
+import ProductVariantDetails from "./ProductVariantDetails";
 
 function ProductDetails({ product }) {
-  const [expandedDescription, setExpandedDescription] = useState(false)
+  const [expandedDescription, setExpandedDescription] = useState(false);
 
   return (
     <>
@@ -48,9 +48,9 @@ function ProductDetails({ product }) {
           {product.details.tags
             .filter((tag) => tag.length > 0)
             .map((tag, index) => (
-              <Tag colorScheme="teal" mx={0} key={index}>
+              <Tag.Root colorScheme="teal" mx={0} key={index}>
                 {tag}
-              </Tag>
+              </Tag.Root>
             ))}
         </Flex>
         <Box shadow="base" rounded="md">
@@ -58,13 +58,13 @@ function ProductDetails({ product }) {
             px="4"
             py="4"
             roundedTop="md"
-            bg={{ base: 'white', _dark: 'gray.900' }}
+            bg={{ base: "white", _dark: "gray.900" }}
           >
             <Text
               pl="8"
               pr="8"
               fontSize="sm"
-              maxHeight={expandedDescription ? '' : '8.75rem'}
+              maxHeight={expandedDescription ? "" : "8.75rem"}
               overflow="hidden"
               dangerouslySetInnerHTML={{
                 __html: product.details.description,
@@ -87,7 +87,7 @@ function ProductDetails({ product }) {
                   h={3}
                   mr="2"
                 />
-                {expandedDescription ? 'Show less' : 'Show more'}
+                {expandedDescription ? "Show less" : "Show more"}
                 <Icon
                   as={
                     expandedDescription
@@ -105,16 +105,16 @@ function ProductDetails({ product }) {
             px="4"
             py="4"
             roundedBottom="md"
-            bg={{ base: 'gray.100', _dark: 'gray.800' }}
+            bg={{ base: "gray.100", _dark: "gray.800" }}
           >
             <Wrap
               spacing={{
-                base: '16px',
-                sm: '38px',
-                md: '16px',
-                lg: '24px',
-                xl: '16px',
-                '2xl': '21px',
+                base: "16px",
+                sm: "38px",
+                md: "16px",
+                lg: "24px",
+                xl: "16px",
+                "2xl": "21px",
               }}
             >
               {product.images.map((image, index) => (
@@ -150,11 +150,11 @@ function ProductDetails({ product }) {
                 listed={product.details.listed}
               />
             )),
-          [product.variants, product.details.listed]
+          [product.variants, product.details.listed],
         )}
       </VStack>
     </>
-  )
+  );
 }
 
-export default ProductDetails
+export default ProductDetails;

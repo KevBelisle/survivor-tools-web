@@ -1,16 +1,11 @@
-import {
-  Box,
-  Center,
-  Flex,
-  Tag,
-} from '@chakra-ui/react'
-import React from 'react'
-import NewsletterSummary from './NewsletterSummary'
+import { Box, Center, Flex, Tag } from "@chakra-ui/react";
+import React from "react";
+import NewsletterSummary from "./NewsletterSummary";
 
 const NewsletterListTimeline = ({ filteredNewsletters }) => {
-  const timelineWidth = 2 // 2rem (equivalent to spacing.8)
-  const tagBackground = { base: 'white', _dark: 'gray.800' }
-  const yearBackground = { base: 'teal.400', _dark: 'teal.500' }
+  const timelineWidth = 2; // 2rem (equivalent to spacing.8)
+  const tagBackground = { base: "white", _dark: "gray.800" };
+  const yearBackground = { base: "teal.400", _dark: "teal.500" };
 
   return (
     <>
@@ -24,11 +19,11 @@ const NewsletterListTimeline = ({ filteredNewsletters }) => {
         background="linear-gradient(0deg, rgba(0,0,0,0) 0, var(--chakra-colors-teal-500) 50px)"
       />
       {filteredNewsletters.map((newsletter, index) => {
-        const date = newsletter.item.sentAt.substring(0, 10)
-        const year = newsletter.item.sentAt.substring(0, 4)
+        const date = newsletter.item.sentAt.substring(0, 10);
+        const year = newsletter.item.sentAt.substring(0, 4);
 
         const newYear =
-          year != filteredNewsletters[index - 1]?.item.sentAt.substring(0, 4)
+          year != filteredNewsletters[index - 1]?.item.sentAt.substring(0, 4);
 
         return (
           <>
@@ -40,9 +35,13 @@ const NewsletterListTimeline = ({ filteredNewsletters }) => {
                   position="relative"
                 >
                   <Center py="2">
-                    <Tag variant="subtle" background={yearBackground} size="lg">
+                    <Tag.Root
+                      variant="subtle"
+                      background={yearBackground}
+                      size="lg"
+                    >
                       {year}
-                    </Tag>
+                    </Tag.Root>
                   </Center>
                 </Box>
               </Flex>
@@ -56,9 +55,9 @@ const NewsletterListTimeline = ({ filteredNewsletters }) => {
                 position="relative"
               >
                 <Center py="2">
-                  <Tag variant="subtle" background={tagBackground}>
+                  <Tag.Root variant="subtle" background={tagBackground}>
                     {date}
-                  </Tag>
+                  </Tag.Root>
                 </Center>
               </Box>
               <NewsletterSummary
@@ -68,10 +67,10 @@ const NewsletterListTimeline = ({ filteredNewsletters }) => {
               />
             </Flex>
           </>
-        )
+        );
       })}
     </>
-  )
-}
+  );
+};
 
-export default NewsletterListTimeline
+export default NewsletterListTimeline;

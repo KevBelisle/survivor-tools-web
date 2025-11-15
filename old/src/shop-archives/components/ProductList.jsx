@@ -1,8 +1,8 @@
-import React from 'react'
+import React from "react";
 
-import ProductListSearch from './ProductListSearch'
-import ProductMasonry from './ProductMasonry'
-import ProductMasonrySkeleton from './ProductMasonrySkeleton'
+import ProductListSearch from "./ProductListSearch";
+import ProductMasonry from "./ProductMasonry";
+import ProductMasonrySkeleton from "./ProductMasonrySkeleton";
 
 const ProductList = ({
   searchTerm,
@@ -38,7 +38,7 @@ const ProductList = ({
         <ProductMasonry products={filteredProducts} />
       )}
     </>
-  )
-}
+  );
+};
 
-export default ProductList
+export default ProductList;
