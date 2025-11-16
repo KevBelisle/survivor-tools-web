@@ -33,6 +33,8 @@ function getStateLabel(state: Product["state"]) {
 
 export function ProductCard({ product }: ProductCardProps) {
   const imgHeight = (320 / product.image.width) * product.image.height;
+  const [filename, extension] = product.image.uri.split(".");
+  const imgSrc = `https://archives.survivor.tools/images/${filename}-preview.${extension}`;
   return (
     <Card.Root
       w="320px"
@@ -42,11 +44,12 @@ export function ProductCard({ product }: ProductCardProps) {
       boxShadow="xs"
     >
       <Image
-        src={`https://archives.survivor.tools/images/${product.image.uri}`}
+        src={imgSrc}
         alt={product.image.alt}
         htmlWidth="320px"
         htmlHeight={`${imgHeight}px`}
         bg="white"
+        loading="lazy"
       />
       <Card.Body
         display="flex"
