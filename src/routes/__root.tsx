@@ -6,6 +6,7 @@ import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 import { ChakraUIProvider } from "../integrations/chakra-ui/provider";
 
 import type { QueryClient } from "@tanstack/react-query";
+import { ColorModeButton } from "@/components/ui/color-mode";
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -14,6 +15,7 @@ interface MyRouterContext {
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
     <ChakraUIProvider>
+      <ColorModeButton />
       <Outlet />
       <TanStackDevtools
         config={{

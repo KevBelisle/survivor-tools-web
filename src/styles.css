@@ -1,0 +1,6 @@
+html.light {
+  background: var(--chakra-colors-gray-200) !important;
+}
+html.dark {
+  background: var(--chakra-colors-gray-600) !important;
+}

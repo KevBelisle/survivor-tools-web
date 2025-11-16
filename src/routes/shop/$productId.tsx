@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { fetchProduct } from "@/services/shop";
+import { fetchProduct } from "@/shop/api";
 import { Container, Heading, Box } from "@chakra-ui/react";
 
 export const Route = createFileRoute("/shop/$productId")({

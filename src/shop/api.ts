@@ -1,5 +1,5 @@
 import apiClient from "@/lib/axios";
-import type { ProductsResponse, ProductDetailResponse } from "@/types/shop";
+import type { ProductsResponse, ProductDetailResponse } from "@/shop/types";
 
 export async function fetchProducts(): Promise<ProductsResponse> {
   const response = await apiClient.get<ProductsResponse>("/products");
