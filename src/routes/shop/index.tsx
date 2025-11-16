@@ -3,6 +3,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { fetchProducts } from "@/shop/api";
 import { Container, Grid } from "@chakra-ui/react";
 import { ProductCard } from "@/shop/components/ProductCard";
+import { Masonry } from "masonic";
+import type { Product } from "@/shop/types";
 
 export const Route = createFileRoute("/shop/")({
   loader: ({ context: { queryClient } }) => {
@@ -14,6 +16,22 @@ export const Route = createFileRoute("/shop/")({
   component: RouteComponent,
 });
 
+function MasonryCard({
+  index,
+  data: product,
+  width,
+}: {
+  index: number;
+  data: Product;
+  width: number;
+}) {
+  return (
+    <Link key={product.id} to={`/shop/${product.id}`}>
+      <ProductCard product={product} />
+    </Link>
+  );
+}
+
 function RouteComponent() {
   const { data } = useSuspenseQuery({
     queryKey: ["products"],
@@ -22,7 +40,15 @@ function RouteComponent() {
 
   return (
     <Container>
-      <Grid
+      <Masonry
+        items={data.products.sort((a, b) => a.title.localeCompare(b.title))}
+        render={MasonryCard}
+        columnWidth={320}
+        columnGutter={20}
+        itemKey={(product) => product.id}
+      />
+
+      {/*<Grid
         templateColumns={{
           base: "repeat(1, 320px)",
           sm: "repeat(2, 320px)",
@@ -40,7 +66,7 @@ function RouteComponent() {
               <ProductCard product={product} />
             </Link>
           ))}
-      </Grid>
+      </Grid>*/}
     </Container>
   );
 }

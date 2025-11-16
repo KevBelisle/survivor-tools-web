@@ -36,7 +36,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Card.Root
       w="320px"
-      variant="outline"
+      variant="subtle"
       overflow="hidden"
       bg="bg.muted"
       boxShadow="xs"
