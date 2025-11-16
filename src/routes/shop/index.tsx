@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { fetchProducts } from "@/shop/api";
-import { Container, Grid } from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 import { ProductCard } from "@/shop/components/ProductCard";
 import { Masonry } from "masonic";
 import type { Product } from "@/shop/types";
