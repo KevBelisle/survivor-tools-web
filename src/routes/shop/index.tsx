@@ -17,9 +17,7 @@ export const Route = createFileRoute("/shop/")({
 });
 
 function MasonryCard({
-  index,
   data: product,
-  width,
 }: {
   index: number;
   data: Product;
