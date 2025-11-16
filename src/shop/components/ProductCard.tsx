@@ -44,10 +44,8 @@ export function ProductCard({ product }: ProductCardProps) {
       <Image
         src={`https://archives.survivor.tools/images/${product.image.uri}`}
         alt={product.image.alt}
-        width={product.image.width}
-        height={product.image.height}
-        w="320px"
-        h={`${imgHeight}px`}
+        htmlWidth="320px"
+        htmlHeight={`${imgHeight}px`}
         bg="white"
       />
       <Card.Body
