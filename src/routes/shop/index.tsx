@@ -6,6 +6,7 @@ import {
 } from "@/shop/components/MasonryLayout";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import useFuse from "@/hooks/useFuse";
+import { SearchBar } from "@/shop/components/SearchBar";
 
 type ProductSearch = {
   query: string;
@@ -47,5 +48,10 @@ function RouteComponent() {
   const products =
     query.length >= 3 ? fuseFilteredProducts.map((a) => a.item) : data.products;
 
-  return <ProductMasonry products={products} />;
+  return (
+    <>
+      <SearchBar />
+      <ProductMasonry products={products} />
+    </>
+  );
 }

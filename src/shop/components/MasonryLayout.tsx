@@ -1,4 +1,4 @@
-import { Container } from "@chakra-ui/react";
+import { Container, Text } from "@chakra-ui/react";
 import { Masonry } from "masonic";
 import type { Product } from "../types";
 import { ProductCard, SkeletonProductCard } from "./ProductCard";
@@ -19,6 +19,16 @@ function MasonryCard({
 }
 
 function ProductMasonry({ products }: { products: Product[] }) {
+  if (products.length === 0) {
+    return (
+      <Container my="8">
+        <Text textAlign="center" color="gray.500">
+          No products found
+        </Text>
+      </Container>
+    );
+  }
+
   return (
     <Container my="8">
       <Masonry
