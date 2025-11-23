@@ -20,9 +20,15 @@ function Header() {
               }}
             >
               <Tabs.List>
-                <Tabs.Trigger value="shop">Shop</Tabs.Trigger>
-                <Tabs.Trigger value="newletter">Newsletter</Tabs.Trigger>
-                <Tabs.Trigger value="kickstarter">Kickstarter</Tabs.Trigger>
+                <Tabs.Trigger value="shop" px="4">
+                  Shop
+                </Tabs.Trigger>
+                <Tabs.Trigger value="newletter" px="4">
+                  Newsletter
+                </Tabs.Trigger>
+                <Tabs.Trigger value="kickstarter" px="4">
+                  Kickstarter
+                </Tabs.Trigger>
               </Tabs.List>
             </Tabs.Root>
           </Flex>
