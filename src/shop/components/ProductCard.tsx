@@ -1,4 +1,4 @@
-import { Card, Image, Badge } from "@chakra-ui/react";
+import { Card, Image, Badge, Skeleton } from "@chakra-ui/react";
 import type { Product } from "@/shop/types";
 
 interface ProductCardProps {
@@ -31,7 +31,7 @@ function getStateLabel(state: Product["state"]) {
   }
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+function ProductCard({ product }: ProductCardProps) {
   const imgHeight = (320 / product.image.width) * product.image.height;
   const [filename, extension] = product.image.uri.split(".");
   const imgSrc = `https://archives.survivor.tools/images/${filename}-preview.${extension}`;
@@ -75,3 +75,61 @@ export function ProductCard({ product }: ProductCardProps) {
     </Card.Root>
   );
 }
+
+interface SkeletonProductCardProps {
+  imageHeight?: number;
+}
+
+function SkeletonProductCard({ imageHeight = 320 }: SkeletonProductCardProps) {
+  return (
+    <Card.Root
+      w="320px"
+      variant="subtle"
+      overflow="hidden"
+      bg="bg.muted"
+      boxShadow="xs"
+    >
+      <Skeleton
+        height={`${imageHeight}px`}
+        variant="shine"
+        css={{
+          "--start-color": "colors.gray.100",
+          "--end-color": "colors.white",
+        }}
+      />
+      <Card.Body
+        display="flex"
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+        py="3"
+        px="4"
+        gap="2"
+        borderTop="1px solid"
+        borderColor="border.emphasized"
+      >
+        <Skeleton
+          height="6"
+          width="60%"
+          variant="shine"
+          css={{
+            "--start-color": "colors.gray.100",
+            "--end-color": "colors.gray.300",
+          }}
+        />
+        <Skeleton
+          height="5"
+          width="70px"
+          borderRadius="sm"
+          variant="shine"
+          css={{
+            "--start-color": "colors.gray.100",
+            "--end-color": "colors.gray.300",
+          }}
+        />
+      </Card.Body>
+    </Card.Root>
+  );
+}
+
+export { ProductCard, SkeletonProductCard };

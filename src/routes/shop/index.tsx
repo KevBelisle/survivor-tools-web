@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { fetchProducts } from "@/shop/api";
-import { ProductMasonry } from "@/shop/components/MasonryLayout";
+import {
+  ProductMasonry,
+  SkeletonProductMasonry,
+} from "@/shop/components/MasonryLayout";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import useFuse from "@/hooks/useFuse";
 
@@ -23,7 +26,7 @@ export const Route = createFileRoute("/shop/")({
   },
   pendingMs: 500,
   pendingMinMs: 500,
-  pendingComponent: () => <div>Pending component</div>,
+  pendingComponent: SkeletonProductMasonry,
   component: RouteComponent,
 });
 
