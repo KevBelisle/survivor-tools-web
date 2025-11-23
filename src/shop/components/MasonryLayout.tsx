@@ -20,7 +20,7 @@ function MasonryCard({
 
 function ProductMasonry({ products }: { products: Product[] }) {
   return (
-    <Container>
+    <Container my="8">
       <Masonry
         items={products}
         render={MasonryCard}
