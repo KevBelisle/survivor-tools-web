@@ -1,4 +1,4 @@
-import { Card, Image, Badge, Skeleton } from "@chakra-ui/react";
+import { Card, Image, Badge, Flex } from "@chakra-ui/react";
 import type { Product } from "@/shop/types";
 
 interface ProductCardProps {
@@ -53,83 +53,33 @@ function ProductCard({ product }: ProductCardProps) {
       />
       <Card.Body
         display="flex"
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="flex-start"
+        flexDirection="column"
         py="2"
         px="4"
-        gap="2"
         borderTop="1px solid"
         borderColor="border.emphasized"
       >
         <Card.Title fontSize="md">{product.title}</Card.Title>
 
-        <Badge
-          colorPalette={getStateBadgeColorScheme(product.state)}
-          variant="solid"
-          mt="1"
-        >
-          {getStateLabel(product.state)}
-        </Badge>
+        <Flex direction="row" justifyContent="flex-end" gap="2">
+          <Badge
+            variant="solid"
+            bg={{ base: "gray.400", _dark: "gray.600" }}
+            mt="1"
+          >
+            First seen: {product.firstSeenAt.substring(0, 10)}
+          </Badge>
+          <Badge
+            colorPalette={getStateBadgeColorScheme(product.state)}
+            variant="solid"
+            mt="1"
+          >
+            {getStateLabel(product.state)}
+          </Badge>
+        </Flex>
       </Card.Body>
     </Card.Root>
   );
 }
 
-interface SkeletonProductCardProps {
-  imageHeight?: number;
-}
-
-function SkeletonProductCard({ imageHeight = 320 }: SkeletonProductCardProps) {
-  return (
-    <Card.Root
-      w="320px"
-      variant="subtle"
-      overflow="hidden"
-      bg="bg.muted"
-      boxShadow="xs"
-    >
-      <Skeleton
-        height={`${imageHeight}px`}
-        variant="shine"
-        css={{
-          "--start-color": "colors.gray.100",
-          "--end-color": "colors.white",
-        }}
-      />
-      <Card.Body
-        display="flex"
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
-        py="3"
-        px="4"
-        gap="2"
-        borderTop="1px solid"
-        borderColor="border.emphasized"
-      >
-        <Skeleton
-          height="6"
-          width="60%"
-          variant="shine"
-          css={{
-            "--start-color": "colors.gray.100",
-            "--end-color": "colors.gray.300",
-          }}
-        />
-        <Skeleton
-          height="5"
-          width="70px"
-          borderRadius="sm"
-          variant="shine"
-          css={{
-            "--start-color": "colors.gray.100",
-            "--end-color": "colors.gray.300",
-          }}
-        />
-      </Card.Body>
-    </Card.Root>
-  );
-}
-
-export { ProductCard, SkeletonProductCard };
+export { ProductCard };

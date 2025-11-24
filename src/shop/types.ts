@@ -12,6 +12,7 @@ export interface Product {
   id: string;
   title: string;
   state: "inStock" | "outOfStock" | "unlisted";
+  firstSeenAt: string;
   image: ProductImage;
   type: string;
   currentTags: string[];

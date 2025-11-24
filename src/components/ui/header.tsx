@@ -23,10 +23,10 @@ function Header() {
                 <Tabs.Trigger value="shop" px="4">
                   Shop
                 </Tabs.Trigger>
-                <Tabs.Trigger value="newletter" px="4">
+                <Tabs.Trigger value="newletter" px="4" disabled>
                   Newsletter
                 </Tabs.Trigger>
-                <Tabs.Trigger value="kickstarter" px="4">
+                <Tabs.Trigger value="kickstarter" px="4" disabled>
                   Kickstarter
                 </Tabs.Trigger>
               </Tabs.List>
