@@ -29,9 +29,13 @@ function ProductMasonry({ products }: { products: Product[] }) {
     );
   }
 
+  // Create a key based on item IDs to force Masonry to remount when items change
+  const masonryKey = products.map((p) => p.id).join(",");
+
   return (
     <Container my="8">
       <Masonry
+        key={masonryKey}
         items={products}
         render={MasonryCard}
         columnWidth={320}
