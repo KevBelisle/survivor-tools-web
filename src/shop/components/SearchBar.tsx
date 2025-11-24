@@ -3,6 +3,7 @@ import {
   Flex,
   IconButton,
   Input,
+  InputGroup,
   Popover,
   Portal,
   Text,
@@ -20,11 +21,23 @@ function SearchBar() {
 
   // Local state for input (for debouncing)
   const [inputValue, setInputValue] = useState(query);
+  const [showHint, setShowHint] = useState(false);
 
   // Sync local state when URL changes (e.g., browser back/forward)
   useEffect(() => {
     setInputValue(query);
   }, [query]);
+
+  // Show hint after 1 second if input has 1-2 characters
+  useEffect(() => {
+    if (inputValue.length > 0 && inputValue.length < 3) {
+      const timeoutId = setTimeout(() => {
+        setShowHint(true);
+      }, 1000);
+      return () => clearTimeout(timeoutId);
+    }
+    setShowHint(false);
+  }, [inputValue]);
 
   // Debounced navigation to update URL
   useEffect(() => {
@@ -50,12 +63,23 @@ function SearchBar() {
   return (
     <Container>
       <Flex borderBottomRadius="sm" p="4" gap="4" bg="gray.300">
-        <Input
-          variant="subtle"
-          placeholder="Search products..."
-          value={inputValue}
-          onChange={handleInputChange}
-        />
+        <InputGroup
+          flex="1"
+          endElement={
+            showHint ? (
+              <Text color="fg.muted" textStyle="xs">
+                (min. 3 characters)
+              </Text>
+            ) : undefined
+          }
+        >
+          <Input
+            variant="subtle"
+            placeholder="Search products..."
+            value={inputValue}
+            onChange={handleInputChange}
+          />
+        </InputGroup>
         <Popover.Root positioning={{ placement: "bottom-end" }} modal={true}>
           <Popover.Trigger asChild>
             <IconButton variant="solid">
