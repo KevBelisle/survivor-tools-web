@@ -1,7 +1,7 @@
 
 [x] Add top level nav bar
 [x] Add skeleton loader for products list
-[] Add shop search, filter and sort for shop section
+[x] Add shop search, filter and sort for shop section
 [] Product detail page
 [] Add KS archive section
 [] Add Newsletter archive section
