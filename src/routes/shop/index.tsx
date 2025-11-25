@@ -87,6 +87,22 @@ function RouteComponent() {
     return Array.from(types).sort();
   }, [data.products]);
 
+  // Apply text search with Fuse.js first (on stable data.products to avoid rebuilding index)
+  const fuseResults = useFuse(data.products, query, {
+    keys: ["title"],
+    minMatchCharLength: 3,
+    threshold: 0.3,
+  });
+
+  const searchedProducts = useMemo(() => {
+    if (query.length >= 3) {
+      return fuseResults
+        .sort((a, b) => (a.score ?? 0) - (b.score ?? 0))
+        .map((a) => a.item);
+    }
+    return data.products;
+  }, [fuseResults, query, data.products]);
+
   // Map URL filter values to API state values
   const stateMap: Record<string, string> = {
     instock: "inStock",
@@ -96,7 +112,7 @@ function RouteComponent() {
 
   // Filter products by states, tags, and types
   const filteredProducts = useMemo(() => {
-    return data.products.filter((product) => {
+    return searchedProducts.filter((product) => {
       // Filter by state
       if (states.length > 0) {
         const mappedStates = states.map((s) => stateMap[s]);
@@ -122,10 +138,10 @@ function RouteComponent() {
 
       return true;
     });
-  }, [data.products, states, selectedTags, selectedTypes]);
+  }, [searchedProducts, states, selectedTags, selectedTypes]);
 
   // Sort products
-  const sortedProducts = useMemo(() => {
+  const products = useMemo(() => {
     const sorted = [...filteredProducts];
     switch (sort) {
       case "name":
@@ -154,18 +170,6 @@ function RouteComponent() {
     }
     return sorted;
   }, [filteredProducts, sort]);
-
-  // Apply text search with Fuse.js
-  const fuseFilteredProducts = useFuse(sortedProducts, query, {
-    keys: ["title"],
-    minMatchCharLength: 3,
-    threshold: 0.5,
-  }).sort((a, b) => (a.score ?? 0) - (b.score ?? 0));
-
-  const products =
-    query.length >= 3
-      ? fuseFilteredProducts.map((a) => a.item)
-      : sortedProducts;
 
   return (
     <>
