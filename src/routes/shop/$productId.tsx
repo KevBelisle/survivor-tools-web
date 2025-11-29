@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { fetchProduct, fetchProductSnapshot } from "@/shop/api";
 import { Container, Flex } from "@chakra-ui/react";
+import { ProductPageHeader } from "@/shop/components/productPage/ProductPageHeader";
 import { ProductDescription } from "@/shop/components/productPage/ProductDescription";
 import { ProductImages } from "@/shop/components/productPage/ProductImages";
 import { ProductVariants } from "@/shop/components/productPage/ProductVariants";
@@ -55,18 +56,21 @@ function RouteComponent() {
     snapshotId && snapshotData ? snapshotData : productData.snapshot;
 
   return (
-    <Container maxW="container.lg" py={8}>
-      <Flex direction="column" gap={8}>
-        <ProductDescription
-          productData={productData}
-          displayData={displayData}
-          snapshotId={snapshotId}
-        />
+    <>
+      <ProductPageHeader />
+      <Container maxW="container.lg" py={8}>
+        <Flex direction="column" gap={8}>
+          <ProductDescription
+            productData={productData}
+            displayData={displayData}
+            snapshotId={snapshotId}
+          />
 
-        <ProductImages images={productData.images} />
+          <ProductImages images={productData.images} />
 
-        <ProductVariants variants={productData.variants} />
-      </Flex>
-    </Container>
+          <ProductVariants variants={productData.variants} />
+        </Flex>
+      </Container>
+    </>
   );
 }
