@@ -18,7 +18,7 @@ function ProductImages({ images }: ProductImagesProps) {
       shadow="sm"
       p="4"
     >
-      <Flex gap="4">
+      <Flex gap="4" flexWrap="wrap">
         {images.map((image) => {
           const [filename, extension] = image.uri.split(".");
           const imgSrc = `https://archives.survivor.tools/images/${filename}-thumbnail.${extension}`;
