@@ -1,8 +1,134 @@
 import { Box, Card, Heading, Text, Flex, Badge } from "@chakra-ui/react";
+import { Chart, useChart } from "@chakra-ui/charts";
 import type { ProductVariant } from "@/shop/types";
+import { LineChart, CartesianGrid, XAxis, YAxis, Line } from "recharts";
+import {
+  PiChartLineDownBold,
+  PiChartLineUpBold,
+  PiCurrencyCircleDollarBold,
+} from "react-icons/pi";
 
 interface ProductVariantsProps {
   variants: ProductVariant[];
+}
+
+function generateTimeSeriesTicks(minTime: number, maxTime: number): number[] {
+  const ticks: number[] = [];
+  const startDate = new Date(minTime);
+  const rangeInDays = (maxTime - minTime) / (1000 * 60 * 60 * 24);
+
+  if (rangeInDays <= 90) {
+    // Monthly ticks for <= 3 months
+    const current = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
+    while (current.getTime() <= maxTime) {
+      if (current.getTime() >= minTime) {
+        ticks.push(current.getTime());
+      }
+      current.setMonth(current.getMonth() + 1);
+    }
+  } else if (rangeInDays <= 365) {
+    // Quarterly ticks for <= 1 year
+    const current = new Date(
+      startDate.getFullYear(),
+      Math.floor(startDate.getMonth() / 3) * 3,
+      1,
+    );
+    while (current.getTime() <= maxTime) {
+      if (current.getTime() >= minTime) {
+        ticks.push(current.getTime());
+      }
+      current.setMonth(current.getMonth() + 3);
+    }
+  } else if (rangeInDays <= 730) {
+    // Semi-annual ticks for <= 2 years
+    const current = new Date(
+      startDate.getFullYear(),
+      Math.floor(startDate.getMonth() / 6) * 6,
+      1,
+    );
+    while (current.getTime() <= maxTime) {
+      if (current.getTime() >= minTime) {
+        ticks.push(current.getTime());
+      }
+      current.setMonth(current.getMonth() + 6);
+    }
+  } else {
+    // Yearly ticks for > 2 years
+    const current = new Date(startDate.getFullYear(), 0, 1);
+    while (current.getTime() <= maxTime) {
+      if (current.getTime() >= minTime) {
+        ticks.push(current.getTime());
+      }
+      current.setFullYear(current.getFullYear() + 1);
+    }
+  }
+
+  return ticks;
+}
+
+function StockHistoryChart({
+  stockHistory,
+}: {
+  stockHistory: { timestamp: string; stock: number }[];
+}) {
+  const sortedHistory = [...stockHistory].sort(
+    (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+  );
+  const chartData = sortedHistory.map((item) => ({
+    timestamp: new Date(item.timestamp).getTime(),
+    stock: item.stock,
+  }));
+
+  // Calculate time range
+  const minTime = chartData[0].timestamp;
+  const maxTime = chartData[chartData.length - 1].timestamp;
+  const rangeInDays = (maxTime - minTime) / (1000 * 60 * 60 * 24);
+
+  // Determine if we're using yearly ticks
+  const useYearlyTicks = rangeInDays > 730;
+
+  const chart = useChart({
+    data: chartData,
+  });
+
+  return (
+    <Box>
+      <Text fontSize="sm" fontWeight="medium" mb="2">
+        Stock History
+      </Text>
+      <Chart.Root height="200px" chart={chart}>
+        <LineChart data={chart.data}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis
+            dataKey="timestamp"
+            type="number"
+            scale="time"
+            domain={["dataMin", "dataMax"]}
+            ticks={generateTimeSeriesTicks(minTime, maxTime)}
+            tickFormatter={(timestamp) => {
+              const date = new Date(timestamp);
+              if (useYearlyTicks) {
+                return date.getFullYear().toString();
+              }
+              return date.toLocaleDateString("en-US", {
+                month: "short",
+                year: "numeric",
+              });
+            }}
+          />
+          <YAxis />
+          <Line
+            type="stepBefore"
+            dataKey="stock"
+            isAnimationActive={false}
+            fill="#C083FC"
+            stroke="#641CA3"
+            strokeWidth={2}
+          />
+        </LineChart>
+      </Chart.Root>
+    </Box>
+  );
 }
 
 function ProductVariants({ variants }: ProductVariantsProps) {
@@ -18,13 +144,9 @@ function ProductVariants({ variants }: ProductVariantsProps) {
       <Flex direction="column" gap="4">
         {variants.map((variant) => {
           const currentStock =
-            variant.stockHistory.length > 0
-              ? variant.stockHistory[variant.stockHistory.length - 1].stock
-              : 0;
+            variant.stockHistory.length > 0 ? variant.stockHistory[0].stock : 0;
           const currentPrice =
-            variant.priceHistory.length > 0
-              ? variant.priceHistory[variant.priceHistory.length - 1].price
-              : 0;
+            variant.priceHistory.length > 0 ? variant.priceHistory[0].price : 0;
 
           const prices = variant.priceHistory.map((p) => p.price);
           const highestPrice = prices.length > 0 ? Math.max(...prices) : 0;
@@ -54,29 +176,31 @@ function ProductVariants({ variants }: ProductVariantsProps) {
                         SKU: {variant.details.sku}
                       </Text>
                     </Box>
+                  </Flex>
+
+                  <Flex gap="2" flexWrap="wrap">
                     <Badge
                       size="lg"
-                      variant="solid"
+                      variant="surface"
                       colorPalette={currentStock > 0 ? "green" : "red"}
                     >
                       Stock: {currentStock}
                     </Badge>
-                  </Flex>
-
-                  <Flex gap="2" flexWrap="wrap">
-                    <Badge size="md" variant="solid" colorPalette="blue">
-                      Current: ${currentPrice.toFixed(2)}
+                    <Badge size="md" variant="surface" colorPalette="cyan">
+                      Last seen at ${currentPrice.toFixed(2)}
                     </Badge>
-                    <Badge size="md" variant="outline" colorPalette="green">
-                      Low: ${lowestPrice.toFixed(2)}
+                    <Badge size="md" variant="surface" colorPalette="gray">
+                      <PiChartLineDownBold /> ${lowestPrice.toFixed(2)}
                     </Badge>
-                    <Badge size="md" variant="outline" colorPalette="red">
-                      High: ${highestPrice.toFixed(2)}
+                    <Badge size="md" variant="surface" colorPalette="gray">
+                      <PiChartLineUpBold /> ${highestPrice.toFixed(2)}
                     </Badge>
                   </Flex>
 
-                  {/* Placeholder for stock graph */}
-                  <Box></Box>
+                  {/* Stock history chart */}
+                  {variant.stockHistory.length > 0 && (
+                    <StockHistoryChart stockHistory={variant.stockHistory} />
+                  )}
                 </Flex>
               </Card.Body>
             </Card.Root>
