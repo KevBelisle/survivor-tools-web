@@ -66,7 +66,7 @@ function ProductDescription({
           ) : null}
           <Text fontSize="xs">
             Currently {productState[productData.state]}
-            {productData.state == "unlisted"
+            {productData.state == "unlisted" && productData.snapshot.unlistedAt
               ? ` (as of ${dateFormatter.format(Date.parse(productData.snapshot.unlistedAt))}).`
               : "."}
           </Text>
