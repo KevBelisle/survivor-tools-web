@@ -1,5 +1,9 @@
 import apiClient from "@/lib/axios";
-import type { ProductsResponse, ProductDetailResponse } from "@/shop/types";
+import type {
+  ProductsResponse,
+  ProductDetailResponse,
+  SnapshotDetailResponse,
+} from "@/shop/types";
 
 export async function fetchProducts(): Promise<ProductsResponse> {
   const response = await apiClient.get<ProductsResponse>("/products");
@@ -11,6 +15,15 @@ export async function fetchProduct(
 ): Promise<ProductDetailResponse> {
   const response = await apiClient.get<ProductDetailResponse>(
     `/products/${productId}`,
+  );
+  return response.data;
+}
+
+export async function fetchProductSnapshot(
+  snapshotId: string,
+): Promise<SnapshotDetailResponse> {
+  const response = await apiClient.get<SnapshotDetailResponse>(
+    `/snapshots/${snapshotId}`,
   );
   return response.data;
 }

@@ -23,24 +23,18 @@ export interface ProductsResponse {
   products: Product[];
 }
 
-export interface ProductDetailImage {
-  imageId: string;
-  alt: string | null;
-  width: number;
-  height: number;
-  uri: string;
-  previewUri: string;
-  thumbnailUri: string;
+export interface Snapshot {
+  id: string;
+  snapshotAt: string;
+  unlistedAt: string;
 }
 
-export interface ProductDetails {
-  id: string;
+export interface SnapshotDetails extends Snapshot {
   handle: string;
   title: string;
   description: string;
   type: string;
   tags: string[];
-  listed: boolean;
 }
 
 export interface ProductVariantDetails {
@@ -68,7 +62,13 @@ export interface ProductVariant {
 }
 
 export interface ProductDetailResponse {
-  details: ProductDetails;
+  id: string;
+  handle: string;
+  state: "inStock" | "outOfStock" | "unlisted";
+  snapshot: SnapshotDetails;
+  snapshots: Snapshot[];
   variants: ProductVariant[];
-  images: ProductDetailImage[];
+  images: ProductImage[];
 }
+
+export interface SnapshotDetailResponse extends SnapshotDetails {}
