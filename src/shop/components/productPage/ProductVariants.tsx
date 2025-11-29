@@ -1,12 +1,16 @@
 import { Box, Card, Heading, Text, Flex, Badge } from "@chakra-ui/react";
 import { Chart, useChart } from "@chakra-ui/charts";
 import type { ProductVariant } from "@/shop/types";
-import { LineChart, CartesianGrid, XAxis, YAxis, Line } from "recharts";
 import {
-  PiChartLineDownBold,
-  PiChartLineUpBold,
-  PiCurrencyCircleDollarBold,
-} from "react-icons/pi";
+  LineChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Line,
+  Tooltip,
+  type TooltipContentProps,
+} from "recharts";
+import { PiChartLineDownBold, PiChartLineUpBold } from "react-icons/pi";
 
 interface ProductVariantsProps {
   variants: ProductVariant[];
@@ -66,18 +70,68 @@ function generateTimeSeriesTicks(minTime: number, maxTime: number): number[] {
   return ticks;
 }
 
+function renderCustomToolTip({
+  active,
+  payload,
+}: TooltipContentProps<string | number, string>) {
+  const isVisible = active && payload && payload.length;
+  return (
+    <Box bg="bg.panel" px="2" py="1" borderRadius="sm" shadow="sm">
+      {isVisible && (
+        <>
+          <p>
+            {new Date(payload[0].payload.timestamp).toLocaleDateString(
+              "en-US",
+              {
+                hour: "numeric",
+                minute: "numeric",
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              },
+            )}
+          </p>
+          <p>Stock: {payload[0].payload.stock}</p>
+          <p>Price: ${payload[0].payload.price.toFixed(2)}</p>
+        </>
+      )}
+    </Box>
+  );
+}
+
 function StockHistoryChart({
   stockHistory,
+  priceHistory,
 }: {
   stockHistory: { timestamp: string; stock: number }[];
+  priceHistory: { timestamp: string; price: number }[];
 }) {
-  const sortedHistory = [...stockHistory].sort(
-    (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+  // Merge stock and price history, carrying forward previous values
+  const allTimestamps = new Set([
+    ...stockHistory.map((item) => item.timestamp),
+    ...priceHistory.map((item) => item.timestamp),
+  ]);
+
+  const sortedTimestamps = Array.from(allTimestamps).sort(
+    (a, b) => new Date(a).getTime() - new Date(b).getTime(),
   );
-  const chartData = sortedHistory.map((item) => ({
-    timestamp: new Date(item.timestamp).getTime(),
-    stock: item.stock,
-  }));
+
+  let lastStock = 0;
+  let lastPrice = 0;
+
+  const chartData = sortedTimestamps.map((timestamp) => {
+    const stockItem = stockHistory.find((item) => item.timestamp === timestamp);
+    const priceItem = priceHistory.find((item) => item.timestamp === timestamp);
+
+    if (stockItem) lastStock = stockItem.stock;
+    if (priceItem) lastPrice = priceItem.price;
+
+    return {
+      timestamp: new Date(timestamp).getTime(),
+      stock: lastStock,
+      price: lastPrice,
+    };
+  });
 
   // Calculate time range
   const minTime = chartData[0].timestamp;
@@ -93,9 +147,6 @@ function StockHistoryChart({
 
   return (
     <Box>
-      <Text fontSize="sm" fontWeight="medium" mb="2">
-        Stock History
-      </Text>
       <Chart.Root height="200px" chart={chart}>
         <LineChart data={chart.data}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -116,11 +167,18 @@ function StockHistoryChart({
               });
             }}
           />
-          <YAxis />
+          <YAxis yAxisId="left" />
+
+          <Tooltip
+            animationDuration={100}
+            cursor={{ stroke: chart.color("border") }}
+            content={renderCustomToolTip}
+          />
           <Line
             type="stepBefore"
             dataKey="stock"
             isAnimationActive={false}
+            yAxisId="left"
             fill="#C083FC"
             stroke="#641CA3"
             strokeWidth={2}
@@ -169,10 +227,7 @@ function ProductVariants({ variants }: ProductVariantsProps) {
                   >
                     <Box>
                       <Card.Title mb="2">{variant.details.title}</Card.Title>
-                      <Text
-                        fontSize="sm"
-                        color={{ base: "gray.600", _dark: "gray.400" }}
-                      >
+                      <Text fontSize="sm" color="fg.subtle">
                         SKU: {variant.details.sku}
                       </Text>
                     </Box>
@@ -198,8 +253,16 @@ function ProductVariants({ variants }: ProductVariantsProps) {
                   </Flex>
 
                   {/* Stock history chart */}
-                  {variant.stockHistory.length > 0 && (
-                    <StockHistoryChart stockHistory={variant.stockHistory} />
+                  {variant.stockHistory.length > 1 ? (
+                    <StockHistoryChart
+                      stockHistory={variant.stockHistory}
+                      priceHistory={variant.priceHistory}
+                    />
+                  ) : (
+                    <Text fontSize="xs" color="fg.subtle">
+                      No stock graph, since we have a single data point for this
+                      variant.
+                    </Text>
                   )}
                 </Flex>
               </Card.Body>
