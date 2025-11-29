@@ -67,6 +67,11 @@ function generateTimeSeriesTicks(minTime: number, maxTime: number): number[] {
     }
   }
 
+  // If no ticks were generated, add start and end ticks
+  if (ticks.length === 0) {
+    ticks.push(minTime, maxTime);
+  }
+
   return ticks;
 }
 
@@ -158,6 +163,25 @@ function StockHistoryChart({
             ticks={generateTimeSeriesTicks(minTime, maxTime)}
             tickFormatter={(timestamp) => {
               const date = new Date(timestamp);
+
+              // Check if it's the exact start of a month (day = 1, time = 00:00:00)
+              const isStartOfMonth =
+                date.getDate() === 1 &&
+                date.getHours() === 0 &&
+                date.getMinutes() === 0 &&
+                date.getSeconds() === 0;
+
+              if (!isStartOfMonth) {
+                // Show full date with time
+                return date.toLocaleString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "2-digit",
+                });
+              }
+
               if (useYearlyTicks) {
                 return date.getFullYear().toString();
               }
