@@ -1,7 +1,19 @@
 import { ColorModeButton } from "@/components/ui/color-mode";
 import { Box, Container, Flex, Heading, Image, Tabs } from "@chakra-ui/react";
+import { useRouterState, Link } from "@tanstack/react-router";
 
 function Header() {
+  const routerState = useRouterState();
+  const pathname = routerState.location.pathname;
+
+  // Determine active tab based on route
+  const getActiveTab = () => {
+    if (pathname.startsWith("/shop")) return "shop";
+    if (pathname.startsWith("/newsletter")) return "newsletter";
+    if (pathname.startsWith("/kickstarter")) return "kickstarter";
+    return "shop"; // Default to shop
+  };
+
   return (
     <Box bg="bg.panel" py="2" shadow="xs">
       <Container>
@@ -12,7 +24,7 @@ function Header() {
               survivor.tools/
             </Heading>
             <Tabs.Root
-              defaultValue="shop"
+              value={getActiveTab()}
               variant="subtle"
               size="sm"
               css={{
@@ -20,10 +32,10 @@ function Header() {
               }}
             >
               <Tabs.List>
-                <Tabs.Trigger value="shop" px="4">
-                  Shop
+                <Tabs.Trigger value="shop" px="4" asChild>
+                  <Link to="/shop">Shop</Link>
                 </Tabs.Trigger>
-                <Tabs.Trigger value="newletter" px="4" disabled>
+                <Tabs.Trigger value="newsletter" px="4" disabled>
                   Newsletter
                 </Tabs.Trigger>
                 <Tabs.Trigger value="kickstarter" px="4" disabled>
