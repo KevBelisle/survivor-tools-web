@@ -121,7 +121,7 @@ function SearchBar({ tags, types }: { tags: string[]; types: string[] }) {
     const timeoutId = setTimeout(() => {
       if (inputValue !== query) {
         navigate({
-          search: (prev: any) => ({ ...prev, query: inputValue }),
+          search: (prev) => ({ ...prev, query: inputValue }),
           replace: true,
         });
       }
@@ -193,7 +193,7 @@ function SearchBar({ tags, types }: { tags: string[]; types: string[] }) {
                     value={[sort]}
                     onValueChange={(details) =>
                       navigate({
-                        search: (prev: any) => ({
+                        search: (prev) => ({
                           ...prev,
                           sort: details.value[0],
                         }),
@@ -210,7 +210,7 @@ function SearchBar({ tags, types }: { tags: string[]; types: string[] }) {
                     value={states}
                     onValueChange={(details) =>
                       navigate({
-                        search: (prev: any) => ({
+                        search: (prev) => ({
                           ...prev,
                           states: details.value,
                         }),
@@ -225,7 +225,7 @@ function SearchBar({ tags, types }: { tags: string[]; types: string[] }) {
                     value={selectedTags}
                     onValueChange={(details) =>
                       navigate({
-                        search: (prev: any) => ({
+                        search: (prev) => ({
                           ...prev,
                           tags: details.value,
                         }),
@@ -240,7 +240,7 @@ function SearchBar({ tags, types }: { tags: string[]; types: string[] }) {
                     value={selectedTypes}
                     onValueChange={(details) =>
                       navigate({
-                        search: (prev: any) => ({
+                        search: (prev) => ({
                           ...prev,
                           types: details.value,
                         }),
