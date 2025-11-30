@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Container, Flex, Button, Box } from "@chakra-ui/react";
+import { Container, Flex, Button } from "@chakra-ui/react";
 import { LuArrowLeft } from "react-icons/lu";
 
 function ProductPageHeader() {
