@@ -12,7 +12,11 @@ function MasonryCard({
   width: number;
 }) {
   return (
-    <Link key={product.id} to={`/shop/${product.id}`}>
+    <Link
+      key={product.id}
+      to={`/shop/$productId`}
+      params={{ productId: product.id }}
+    >
       <ProductCard product={product} />
     </Link>
   );
