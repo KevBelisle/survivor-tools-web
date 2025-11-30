@@ -27,9 +27,8 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 COPY inject-env.sh /docker-entrypoint.d/01-inject-env.sh
 RUN chmod +x /docker-entrypoint.d/01-inject-env.sh
 
-# Copy nginx configuration (optional - using default for now)
-# If you need custom nginx config, uncomment and create nginx.conf:
-# COPY nginx.conf /etc/nginx/nginx.conf
+# Copy nginx configuration for SPA routing support
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80
 EXPOSE 80
