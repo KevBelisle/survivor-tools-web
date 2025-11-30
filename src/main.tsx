@@ -39,7 +39,7 @@ Sentry.init({
   // For example, automatic IP address collection on events
   sendDefaultPii: true,
   integrations: [
-    Sentry.browserTracingIntegration({ levels: ["log", "warn", "error"] }),
+    Sentry.browserTracingIntegration(),
     Sentry.replayIntegration(),
   ],
   // Enable logs to be sent to Sentry
