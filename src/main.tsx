@@ -39,9 +39,11 @@ Sentry.init({
   // For example, automatic IP address collection on events
   sendDefaultPii: true,
   integrations: [
-    Sentry.browserTracingIntegration(),
+    Sentry.browserTracingIntegration({ levels: ["log", "warn", "error"] }),
     Sentry.replayIntegration(),
   ],
+  // Enable logs to be sent to Sentry
+  enableLogs: true,
   // Tracing
   tracesSampleRate: 1.0, //  Capture 100% of the transactions
   // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
