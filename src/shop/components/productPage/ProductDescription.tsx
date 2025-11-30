@@ -55,14 +55,14 @@ function ProductDescription({
       >
         <Span display="flex" gap="4" alignItems="baseline">
           {productData.state != "unlisted" ? (
-            <Link
-              to={`https://shop.kingdomdeath.com/products/${productData.handle}`}
+            <a
+              href={`https://shop.kingdomdeath.com/products/${productData.handle}`}
               target="_blank"
             >
               <Button size="xs" variant="outline" colorPalette="cyan">
                 To Shop <LuShoppingCart />
               </Button>
-            </Link>
+            </a>
           ) : null}
           <Text fontSize="xs">
             Currently {productState[productData.state]}
