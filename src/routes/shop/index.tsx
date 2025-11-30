@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, retainSearchParams } from "@tanstack/react-router";
 import { fetchProducts } from "@/shop/api";
 import { ProductMasonry } from "@/shop/components/MasonryLayout";
 import {
@@ -44,6 +44,9 @@ export const Route = createFileRoute("/shop/")({
       tags: parseArrayParam(search.tags),
       types: parseArrayParam(search.types),
     };
+  },
+  search: {
+    middlewares: [retainSearchParams(true)],
   },
   pendingMs: 500,
   pendingMinMs: 350,
