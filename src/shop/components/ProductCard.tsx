@@ -33,8 +33,7 @@ function getStateLabel(state: Product["state"]) {
 
 function ProductCard({ product }: ProductCardProps) {
   const imgHeight = (320 / product.image.width) * product.image.height;
-  const [filename, extension] = product.image.uri.split(".");
-  const imgSrc = `https://archives.survivor.tools/images/${filename}-preview.${extension}`;
+  const imgSrc = product.image.previewUri ?? product.image.uri;
   return (
     <Card.Root
       w="320px"
