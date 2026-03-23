@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ShopIndexRouteImport } from './routes/shop/index'
+import { Route as NewsIndexRouteImport } from './routes/news/index'
 import { Route as ShopProductIdRouteImport } from './routes/shop/$productId'
+import { Route as NewsItemIdRouteImport } from './routes/news/$itemId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,39 +25,63 @@ const ShopIndexRoute = ShopIndexRouteImport.update({
   path: '/shop/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NewsIndexRoute = NewsIndexRouteImport.update({
+  id: '/news/',
+  path: '/news/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShopProductIdRoute = ShopProductIdRouteImport.update({
   id: '/shop/$productId',
   path: '/shop/$productId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NewsItemIdRoute = NewsItemIdRouteImport.update({
+  id: '/news/$itemId',
+  path: '/news/$itemId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/news/$itemId': typeof NewsItemIdRoute
   '/shop/$productId': typeof ShopProductIdRoute
+  '/news': typeof NewsIndexRoute
   '/shop': typeof ShopIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/news/$itemId': typeof NewsItemIdRoute
   '/shop/$productId': typeof ShopProductIdRoute
+  '/news': typeof NewsIndexRoute
   '/shop': typeof ShopIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/news/$itemId': typeof NewsItemIdRoute
   '/shop/$productId': typeof ShopProductIdRoute
+  '/news/': typeof NewsIndexRoute
   '/shop/': typeof ShopIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/shop/$productId' | '/shop'
+  fullPaths: '/' | '/news/$itemId' | '/shop/$productId' | '/news' | '/shop'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/shop/$productId' | '/shop'
-  id: '__root__' | '/' | '/shop/$productId' | '/shop/'
+  to: '/' | '/news/$itemId' | '/shop/$productId' | '/news' | '/shop'
+  id:
+    | '__root__'
+    | '/'
+    | '/news/$itemId'
+    | '/shop/$productId'
+    | '/news/'
+    | '/shop/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  NewsItemIdRoute: typeof NewsItemIdRoute
   ShopProductIdRoute: typeof ShopProductIdRoute
+  NewsIndexRoute: typeof NewsIndexRoute
   ShopIndexRoute: typeof ShopIndexRoute
 }
 
@@ -75,6 +101,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShopIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/news/': {
+      id: '/news/'
+      path: '/news'
+      fullPath: '/news'
+      preLoaderRoute: typeof NewsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/shop/$productId': {
       id: '/shop/$productId'
       path: '/shop/$productId'
@@ -82,12 +115,21 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShopProductIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/news/$itemId': {
+      id: '/news/$itemId'
+      path: '/news/$itemId'
+      fullPath: '/news/$itemId'
+      preLoaderRoute: typeof NewsItemIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  NewsItemIdRoute: NewsItemIdRoute,
   ShopProductIdRoute: ShopProductIdRoute,
+  NewsIndexRoute: NewsIndexRoute,
   ShopIndexRoute: ShopIndexRoute,
 }
 export const routeTree = rootRouteImport

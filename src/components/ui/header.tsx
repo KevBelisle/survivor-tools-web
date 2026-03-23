@@ -9,8 +9,7 @@ function Header() {
   // Determine active tab based on route
   const getActiveTab = () => {
     if (pathname.startsWith("/shop")) return "shop";
-    if (pathname.startsWith("/newsletter")) return "newsletter";
-    if (pathname.startsWith("/kickstarter")) return "kickstarter";
+    if (pathname.startsWith("/news")) return "news";
     return "shop"; // Default to shop
   };
 
@@ -35,11 +34,8 @@ function Header() {
                 <Tabs.Trigger value="shop" px="4" asChild>
                   <Link to="/shop">Shop</Link>
                 </Tabs.Trigger>
-                <Tabs.Trigger value="newsletter" px="4" disabled>
-                  Newsletter
-                </Tabs.Trigger>
-                <Tabs.Trigger value="kickstarter" px="4" disabled>
-                  Kickstarter
+                <Tabs.Trigger value="news" px="4" asChild>
+                  <Link to="/news">News</Link>
                 </Tabs.Trigger>
               </Tabs.List>
             </Tabs.Root>
