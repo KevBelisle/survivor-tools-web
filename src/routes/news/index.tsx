@@ -233,7 +233,7 @@ function RouteComponent() {
           No news items found.
         </Text>
       ) : (
-        <Timeline.Root size="lg" variant="subtle" showLastSeparator="true">
+        <Timeline.Root size="lg" variant="subtle" showLastSeparator={true}>
           {entries.map((entry, idx) =>
             entry.type === "year" ? (
               <Timeline.Item key={`year-${entry.label}`}>

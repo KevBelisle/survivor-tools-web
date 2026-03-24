@@ -1,20 +1,9 @@
-import { Badge, Card, Flex, Text } from "@chakra-ui/react";
+import { Badge, Card, Text } from "@chakra-ui/react";
 import { Link } from "@tanstack/react-router";
 import type { NewsItemSummary } from "@/news/types";
 
 interface NewsItemCardProps {
   item: NewsItemSummary;
-}
-
-function getSourceBadgeColor(source: NewsItemSummary["source"]) {
-  switch (source) {
-    case "kickstarter":
-      return "green";
-    case "newsletter":
-      return "blue";
-    default:
-      return "gray";
-  }
 }
 
 function truncateText(text: string, maxLength: number): string {
@@ -37,7 +26,7 @@ function NewsItemCard({ item }: NewsItemCardProps) {
         size="sm"
         overflow="hidden"
       >
-        <Card.Header bgColor="white" py="3">
+        <Card.Header bgColor="bg.panel" py="3">
           <Card.Title fontSize="md" alignItems="center">
             <Badge
               colorPalette="gray"
@@ -58,7 +47,13 @@ function NewsItemCard({ item }: NewsItemCardProps) {
         </Card.Header>
         <Card.Body py="3">
           {item.bodyText && (
-            <Text fontSize="sm" color="fg.subtle" mt="1" lineClamp={2}>
+            <Text
+              fontSize="sm"
+              color="fg.subtle"
+              mt="1"
+              lineClamp={2}
+              wordBreak="break-word"
+            >
               {truncateText(item.bodyText, 400)}
             </Text>
           )}
