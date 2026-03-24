@@ -29,12 +29,8 @@ type NewsSearch = {
 const sourceOptions = createListCollection({
   items: [
     { label: "All Sources", value: "" },
-    { label: "Kingdom Death: Monster", value: "Kingdom Death: Monster" },
-    {
-      label: "Kingdom Death: Monster 1.5",
-      value: "Kingdom Death: Monster 1.5",
-    },
-    { label: "Newsletter", value: "Newsletter" },
+    { label: "Kickstarter", value: "kickstarter" },
+    { label: "Newsletter", value: "newsletter" },
   ],
 });
 
@@ -167,7 +163,7 @@ function RouteComponent() {
   // Filter by source
   const sourceFiltered = useMemo(() => {
     if (!source) return data.items;
-    return data.items.filter((item) => item.sourceLabel === source);
+    return data.items.filter((item) => item.source === source);
   }, [data.items, source]);
 
   const fuseResults = useFuse(sourceFiltered, inputValue, {
