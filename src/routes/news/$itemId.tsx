@@ -20,7 +20,7 @@ function getSourceBadgeColor(source: string) {
     case "kickstarter":
       return "green";
     case "newsletter":
-      return "blue";
+      return "cyan";
     default:
       return "gray";
   }
