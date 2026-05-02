@@ -10,6 +10,7 @@ function Header() {
   const getActiveTab = () => {
     if (pathname.startsWith("/shop")) return "shop";
     if (pathname.startsWith("/news")) return "news";
+    if (pathname.startsWith("/events")) return "events";
     return "shop"; // Default to shop
   };
 
@@ -36,6 +37,9 @@ function Header() {
                 </Tabs.Trigger>
                 <Tabs.Trigger value="news" px="4" asChild>
                   <Link to="/news">News</Link>
+                </Tabs.Trigger>
+                <Tabs.Trigger value="events" px="4" asChild>
+                  <Link to="/events">Sales Events</Link>
                 </Tabs.Trigger>
               </Tabs.List>
             </Tabs.Root>
