@@ -64,10 +64,10 @@ const CHANGE_TYPE_PRIORITY: Record<EventChangeType, number> = {
 
 const VISIBLE_COUNTS = {
   base: 2,
-  sm: 4,
-  md: 5,
-  lg: 7,
-  xl: 9,
+  sm: 3,
+  md: 4,
+  lg: 6,
+  xl: 8,
 } as const;
 
 function formatDateRange(startedAt: string, endedAt: string) {
@@ -145,8 +145,8 @@ function ProductChangeCard({ change }: { change: EventProductChange }) {
         </Box>
         <Box px="2" py="1">
           <Text
-            fontSize="xs"
-            lineClamp={2}
+            fontSize="sm"
+            lineClamp={3}
             color="fg"
             title={change.product.title}
           >
@@ -172,11 +172,6 @@ function MoreCard({ count }: { count: number }) {
           +{count}
         </Text>
       </Flex>
-      <Box px="2" py="1">
-        <Text fontSize="xs" color="fg.subtle" lineClamp={2}>
-          and {count} more
-        </Text>
-      </Box>
     </Box>
   );
 }
@@ -323,7 +318,7 @@ function EventCard({ event }: EventCardProps) {
             </Text>
           ) : (
             <SimpleGrid
-              columns={{ base: 2, sm: 4, md: 5, lg: 7, xl: 9 }}
+              columns={{ base: 2, sm: 3, md: 4, lg: 6, xl: 8 }}
               gap="2"
             >
               {cardsToShow.map((change) => (

@@ -41,6 +41,8 @@ function ProductCard({ product }: ProductCardProps) {
       overflow="hidden"
       bg="bg.muted"
       boxShadow="xs"
+      _hover={{ boxShadow: "md", transform: "translateY(-1px)" }}
+      transition="all 0.15s"
     >
       <Image
         src={imgSrc}
