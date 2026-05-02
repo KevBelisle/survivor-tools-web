@@ -4,6 +4,7 @@ export const Route = createFileRoute("/")({
   loader: () => {
     throw redirect({
       to: "/shop",
+      search: { query: "", sort: "", states: [], tags: [], types: [] },
     });
   },
 });
