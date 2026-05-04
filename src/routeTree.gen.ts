@@ -15,6 +15,7 @@ import { Route as NewsIndexRouteImport } from './routes/news/index'
 import { Route as EventsIndexRouteImport } from './routes/events/index'
 import { Route as ShopProductIdRouteImport } from './routes/shop/$productId'
 import { Route as NewsItemIdRouteImport } from './routes/news/$itemId'
+import { Route as EventsEventIdRouteImport } from './routes/events/$eventId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,9 +47,15 @@ const NewsItemIdRoute = NewsItemIdRouteImport.update({
   path: '/news/$itemId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventsEventIdRoute = EventsEventIdRouteImport.update({
+  id: '/events/$eventId',
+  path: '/events/$eventId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/events/$eventId': typeof EventsEventIdRoute
   '/news/$itemId': typeof NewsItemIdRoute
   '/shop/$productId': typeof ShopProductIdRoute
   '/events': typeof EventsIndexRoute
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/events/$eventId': typeof EventsEventIdRoute
   '/news/$itemId': typeof NewsItemIdRoute
   '/shop/$productId': typeof ShopProductIdRoute
   '/events': typeof EventsIndexRoute
@@ -66,6 +74,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/events/$eventId': typeof EventsEventIdRoute
   '/news/$itemId': typeof NewsItemIdRoute
   '/shop/$productId': typeof ShopProductIdRoute
   '/events/': typeof EventsIndexRoute
@@ -76,16 +85,25 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/events/$eventId'
     | '/news/$itemId'
     | '/shop/$productId'
     | '/events'
     | '/news'
     | '/shop'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/news/$itemId' | '/shop/$productId' | '/events' | '/news' | '/shop'
+  to:
+    | '/'
+    | '/events/$eventId'
+    | '/news/$itemId'
+    | '/shop/$productId'
+    | '/events'
+    | '/news'
+    | '/shop'
   id:
     | '__root__'
     | '/'
+    | '/events/$eventId'
     | '/news/$itemId'
     | '/shop/$productId'
     | '/events/'
@@ -95,6 +113,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EventsEventIdRoute: typeof EventsEventIdRoute
   NewsItemIdRoute: typeof NewsItemIdRoute
   ShopProductIdRoute: typeof ShopProductIdRoute
   EventsIndexRoute: typeof EventsIndexRoute
@@ -146,11 +165,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewsItemIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/events/$eventId': {
+      id: '/events/$eventId'
+      path: '/events/$eventId'
+      fullPath: '/events/$eventId'
+      preLoaderRoute: typeof EventsEventIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EventsEventIdRoute: EventsEventIdRoute,
   NewsItemIdRoute: NewsItemIdRoute,
   ShopProductIdRoute: ShopProductIdRoute,
   EventsIndexRoute: EventsIndexRoute,

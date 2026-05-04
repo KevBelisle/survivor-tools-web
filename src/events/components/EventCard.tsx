@@ -4,7 +4,6 @@ import {
   Card,
   Flex,
   Heading,
-  Image,
   SimpleGrid,
   Text,
   useBreakpointValue,
@@ -12,55 +11,17 @@ import {
 import { Link } from "@tanstack/react-router";
 import { LuMail } from "react-icons/lu";
 import { SiKickstarter } from "react-icons/si";
-import type {
-  EventChangeType,
-  EventProductChange,
-  SalesEvent,
-} from "@/events/types";
+import {
+  CHANGE_TYPE_META,
+  CHANGE_TYPE_ORDER,
+  CHANGE_TYPE_PRIORITY,
+} from "@/events/changeTypes";
+import { ProductChangeCard } from "@/events/components/ProductChangeCard";
+import type { EventChangeType, EventProductChange, SalesEvent } from "@/events/types";
 
 interface EventCardProps {
   event: SalesEvent;
 }
-
-const CHANGE_TYPE_META: Record<
-  EventChangeType,
-  { label: string; sectionLabel: string; colorPalette: string }
-> = {
-  new_product: {
-    label: "New",
-    sectionLabel: "new products",
-    colorPalette: "purple",
-  },
-  restock: {
-    label: "Restocked",
-    sectionLabel: "restocked products",
-    colorPalette: "green",
-  },
-  price_decrease: {
-    label: "Price ↓",
-    sectionLabel: "price decreases",
-    colorPalette: "teal",
-  },
-  price_increase: {
-    label: "Price ↑",
-    sectionLabel: "price increases",
-    colorPalette: "orange",
-  },
-};
-
-const CHANGE_TYPE_ORDER: EventChangeType[] = [
-  "new_product",
-  "restock",
-  "price_decrease",
-  "price_increase",
-];
-
-const CHANGE_TYPE_PRIORITY: Record<EventChangeType, number> = {
-  new_product: 0,
-  restock: 1,
-  price_decrease: 2,
-  price_increase: 3,
-};
 
 const VISIBLE_COUNTS = {
   base: 2,
@@ -96,66 +57,6 @@ function formatApproxStartTime(startedAt: string) {
     hour: "numeric",
     minute: "2-digit",
   });
-}
-
-function ProductChangeCard({ change }: { change: EventProductChange }) {
-  const img = change.product.primaryImage;
-  const thumb = img?.previewUri ?? img?.uri ?? img?.thumbnailUri;
-  const meta = CHANGE_TYPE_META[change.changeType];
-  return (
-    <Link
-      to="/shop/$productId"
-      params={{ productId: change.product.id }}
-      style={{ textDecoration: "none" }}
-    >
-      <Box
-        borderRadius="sm"
-        overflow="hidden"
-        bg="bg.subtle"
-        boxShadow="xs"
-        _hover={{ boxShadow: "md", transform: "translateY(-1px)" }}
-        transition="all 0.15s"
-      >
-        <Box position="relative" bg="white" aspectRatio={1}>
-          {thumb ? (
-            <Image
-              src={thumb}
-              alt={img?.alt ?? change.product.title}
-              w="full"
-              h="full"
-              objectFit="cover"
-              loading="lazy"
-            />
-          ) : (
-            <Flex h="full" align="center" justify="center">
-              <Text fontSize="xs" color="fg.subtle">
-                No image
-              </Text>
-            </Flex>
-          )}
-          <Badge
-            position="absolute"
-            top="1"
-            left="1"
-            colorPalette={meta.colorPalette}
-            variant="surface"
-          >
-            {meta.label}
-          </Badge>
-        </Box>
-        <Box px="2" py="1">
-          <Text
-            fontSize="sm"
-            lineClamp={3}
-            color="fg"
-            title={change.product.title}
-          >
-            {change.product.title}
-          </Text>
-        </Box>
-      </Box>
-    </Link>
-  );
 }
 
 function MoreCard({ count }: { count: number }) {
@@ -236,7 +137,12 @@ function EventCard({ event }: EventCardProps) {
               );
             })}
             <Badge asChild colorPalette="cyan" variant="subtle" ms="3">
-              <a href={`/events/${event.id}`}>Details →</a>
+              <Link
+                to="/events/$eventId"
+                params={{ eventId: String(event.id) }}
+              >
+                Details →
+              </Link>
             </Badge>
           </Flex>
         </Flex>
