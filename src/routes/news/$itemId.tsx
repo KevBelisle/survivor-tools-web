@@ -37,7 +37,13 @@ function RouteComponent() {
   return (
     <>
       <NewsPageHeader />
-      <Container maxW="700px" py={6}>
+      <Container
+        maxWidth={{
+          base: "320px",
+          sm: "660px",
+        }}
+        py={6}
+      >
         <Box
           bg={{ base: "white", _dark: "gray.800" }}
           borderRadius="lg"
@@ -84,7 +90,14 @@ function RouteComponent() {
 
             {data.bodyHtml ? (
               <Box
-                dangerouslySetInnerHTML={{ __html: data.bodyHtml }}
+                dangerouslySetInnerHTML={{
+                  // Newsletters often hardcode a wider max-width on inner
+                  // elements that overflows our container; strip those.
+                  __html: data.bodyHtml.replace(
+                    /max-width:\s*\d+px\s*(?:!important)?\s*;?/gi,
+                    "",
+                  ),
+                }}
                 css={{
                   "& p": { marginBottom: "1rem" },
                   "& ul, & ol": { marginLeft: "1.5rem", marginBottom: "1rem" },
