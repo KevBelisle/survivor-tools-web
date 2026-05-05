@@ -13,7 +13,7 @@ function ProductImages({ images }: ProductImagesProps) {
 
 	return (
 		<Box
-			bg={{ base: "white", _dark: "gray.800" }}
+			bg={{ base: "white", _dark: "gray.900" }}
 			borderRadius="lg"
 			overflow="hidden"
 			shadow="sm"

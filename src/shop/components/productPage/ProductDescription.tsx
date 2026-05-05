@@ -43,13 +43,13 @@ function ProductDescription({
 
 	return (
 		<Box
-			bg={{ base: "white", _dark: "gray.800" }}
+			bg={{ base: "white", _dark: "gray.900" }}
 			borderRadius="lg"
 			overflow="hidden"
 			shadow="sm"
 		>
 			<Box
-				bg={{ base: "gray.100", _dark: "gray.900" }}
+				bg={{ base: "gray.100", _dark: "gray.950" }}
 				px="4"
 				py="2"
 				display="flex"

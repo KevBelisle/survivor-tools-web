@@ -238,7 +238,7 @@ function ProductVariants({ variants }: ProductVariantsProps) {
             <Card.Root
               key={variant.details.id}
               variant="subtle"
-              bg={{ base: "white", _dark: "gray.800" }}
+              bg={{ base: "white", _dark: "gray.900" }}
               shadow="sm"
             >
               <Card.Body>
