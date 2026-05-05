@@ -15,9 +15,10 @@ import {
   CHANGE_TYPE_META,
   CHANGE_TYPE_ORDER,
   CHANGE_TYPE_PRIORITY,
+  dedupeProductChanges,
 } from "@/events/changeTypes";
 import { ProductChangeCard } from "@/events/components/ProductChangeCard";
-import type { EventChangeType, EventProductChange, SalesEvent } from "@/events/types";
+import type { EventChangeType, SalesEvent } from "@/events/types";
 
 interface EventCardProps {
   event: SalesEvent;
@@ -78,14 +79,7 @@ function MoreCard({ count }: { count: number }) {
 }
 
 function EventCard({ event }: EventCardProps) {
-  const dedupedChanges: EventProductChange[] = [];
-  const seen = new Set<string>();
-  for (const c of event.productChanges) {
-    const key = `${c.productId}-${c.changeType}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    dedupedChanges.push(c);
-  }
+  const dedupedChanges = dedupeProductChanges(event.productChanges);
 
   const groupedCounts = new Map<EventChangeType, number>();
   for (const c of dedupedChanges) {
@@ -129,6 +123,7 @@ function EventCard({ event }: EventCardProps) {
               return (
                 <Badge
                   key={type}
+                  size="md"
                   colorPalette={meta.colorPalette}
                   variant="surface"
                 >
@@ -136,7 +131,7 @@ function EventCard({ event }: EventCardProps) {
                 </Badge>
               );
             })}
-            <Badge asChild colorPalette="cyan" variant="subtle" ms="3">
+            <Badge asChild size="md" colorPalette="cyan" variant="subtle" ms="3">
               <Link
                 to="/events/$eventId"
                 params={{ eventId: String(event.id) }}

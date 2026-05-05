@@ -16,6 +16,7 @@ import { fetchEvent } from "@/events/api";
 import {
   CHANGE_TYPE_META,
   CHANGE_TYPE_ORDER,
+  dedupeProductChanges,
 } from "@/events/changeTypes";
 import { EventPageHeader } from "@/events/components/EventPageHeader";
 import { ProductChangeCard } from "@/events/components/ProductChangeCard";
@@ -44,18 +45,6 @@ function formatStartTime(startedAt: string) {
     hour: "numeric",
     minute: "2-digit",
   });
-}
-
-function dedupeChanges(changes: EventProductChange[]): EventProductChange[] {
-  const seen = new Set<string>();
-  const out: EventProductChange[] = [];
-  for (const c of changes) {
-    const key = `${c.productId}-${c.changeType}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    out.push(c);
-  }
-  return out;
 }
 
 function StatTile({
@@ -121,7 +110,7 @@ function RouteComponent() {
     queryFn: () => fetchEvent(Number(eventId)),
   });
 
-  const dedupedChanges = dedupeChanges(event.productChanges);
+  const dedupedChanges = dedupeProductChanges(event.productChanges);
 
   const grouped = new Map<EventChangeType, EventProductChange[]>();
   for (const c of dedupedChanges) {
@@ -269,11 +258,18 @@ function RouteComponent() {
           {CHANGE_TYPE_ORDER.map((type) => {
             const changes = grouped.get(type);
             if (!changes || changes.length === 0) return null;
+            const meta = CHANGE_TYPE_META[type];
+            const sectionTitle =
+              meta.sectionLabel.charAt(0).toUpperCase() +
+              meta.sectionLabel.slice(1);
             return (
-              <PageCard key={type}>
+              <Box key={type}>
+                <Heading as="h2" size="2xl" mb="4">
+                  {changes.length} {sectionTitle}
+                </Heading>
                 <SimpleGrid
                   columns={{ base: 2, sm: 3, md: 4, lg: 6, xl: 8 }}
-                  gap="2"
+                  gap="4"
                 >
                   {changes.map((change) => (
                     <ProductChangeCard
@@ -282,7 +278,7 @@ function RouteComponent() {
                     />
                   ))}
                 </SimpleGrid>
-              </PageCard>
+              </Box>
             );
           })}
         </Flex>
