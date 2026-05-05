@@ -32,21 +32,12 @@ const VISIBLE_COUNTS = {
   xl: 8,
 } as const;
 
-function formatDateRange(startedAt: string, endedAt: string) {
-  const start = new Date(startedAt);
-  const end = new Date(endedAt);
-  const startStr = start.toLocaleDateString("en-US", {
+function formatStartDate(startedAt: string) {
+  return new Date(startedAt).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
   });
-  const endStr = end.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-  if (startStr === endStr) return startStr;
-  return `${startStr} – ${endStr}`;
 }
 
 function formatApproxStartTime(startedAt: string) {
@@ -60,21 +51,28 @@ function formatApproxStartTime(startedAt: string) {
   });
 }
 
-function MoreCard({ count }: { count: number }) {
+function MoreCard({ count, eventId }: { count: number; eventId: number }) {
   return (
-    <Box
-      borderRadius="sm"
-      overflow="hidden"
-      bg={{ base: "gray.200", _dark: "gray.700" }}
-      boxShadow="xs"
-      alignSelf="start"
-    >
-      <Flex aspectRatio={1} align="center" justify="center">
-        <Text fontSize="lg" fontWeight="semibold" color="fg.subtle">
-          +{count}
-        </Text>
-      </Flex>
-    </Box>
+    <Link to="/events/$eventId" params={{ eventId: String(eventId) }}>
+      <Box
+        borderRadius="sm"
+        overflow="hidden"
+        bg={{ base: "gray.200", _dark: "gray.700" }}
+        boxShadow="xs"
+        alignSelf="start"
+        _hover={{ bg: { base: "gray.300", _dark: "gray.600" } }}
+        transition="background-color 0.15s"
+      >
+        <Flex aspectRatio={1} direction="column" align="center" justify="center" gap="0.5">
+          <Text fontSize="lg" fontWeight="semibold" color="fg.subtle">
+            +{count}
+          </Text>
+          <Text fontSize="2xs" fontWeight="medium" color="fg.subtle" textTransform="uppercase" letterSpacing="wide">
+            View all
+          </Text>
+        </Flex>
+      </Box>
+    </Link>
   );
 }
 
@@ -105,50 +103,37 @@ function EventCard({ event }: EventCardProps) {
 
   return (
     <Card.Root variant="subtle" bg="bg.muted" boxShadow="xs" overflow="hidden">
-      <Card.Header bgColor="bg.panel" py="3" pe="3">
-        <Flex align="center" justify="space-between" gap="3" wrap="wrap">
-          <Flex align="baseline" gap="2" wrap="wrap">
+      <Card.Header bgColor="bg.panel" py="3" px="4">
+        <Flex align="center" justify="space-between" gap="3">
+          <Flex align="baseline" gap="2">
             <Heading as="h2" size="sm">
-              {formatDateRange(event.startedAt, event.endedAt)}
+              {formatStartDate(event.startedAt)}
             </Heading>
             <Text fontSize="sm" color="fg.subtle">
               ~{formatApproxStartTime(event.startedAt)}
             </Text>
           </Flex>
-          <Flex gap="2" wrap="wrap" align="center">
-            {CHANGE_TYPE_ORDER.map((type) => {
-              const count = groupedCounts.get(type);
-              if (!count) return null;
-              const meta = CHANGE_TYPE_META[type];
-              return (
-                <Badge
-                  key={type}
-                  size="md"
-                  colorPalette={meta.colorPalette}
-                  variant="surface"
-                >
-                  {meta.label}: {count}
-                </Badge>
-              );
-            })}
-            <Badge asChild size="md" colorPalette="cyan" variant="subtle" ms="3">
-              <Link
-                to="/events/$eventId"
-                params={{ eventId: String(event.id) }}
-              >
-                Details →
-              </Link>
-            </Badge>
-          </Flex>
+          <Badge asChild size="md" colorPalette="cyan" variant="subtle" flexShrink={0}>
+            <Link to="/events/$eventId" params={{ eventId: String(event.id) }}>
+              Details →
+            </Link>
+          </Badge>
         </Flex>
       </Card.Header>
-      <Card.Body
-        py="3"
-        px="4"
-        gap="4"
-        flexDirection={{ base: "column", md: "row" }}
-        alignItems="stretch"
-      >
+      <Card.Body py="3" px="4" gap="3" flexDirection="column">
+        <Flex justify="flex-end" gap="2" wrap="wrap">
+          {CHANGE_TYPE_ORDER.map((type) => {
+            const count = groupedCounts.get(type);
+            if (!count) return null;
+            const meta = CHANGE_TYPE_META[type];
+            return (
+              <Badge key={type} size="md" colorPalette={meta.colorPalette} variant="surface">
+                {meta.label}: {count}
+              </Badge>
+            );
+          })}
+        </Flex>
+        <Flex gap="4" flexDirection={{ base: "column", md: "row" }} alignItems="stretch">
         <Box
           flexBasis={{ md: "30%" }}
           flexShrink={0}
@@ -203,7 +188,7 @@ function EventCard({ event }: EventCardProps) {
                         <LuMail />
                       )}
                     </Box>
-                    <Text fontSize="sm" flex="1">
+                    <Text fontSize="sm" flex="1" overflowWrap="anywhere">
                       {item.title}
                     </Text>
                   </Flex>
@@ -228,10 +213,11 @@ function EventCard({ event }: EventCardProps) {
                   change={change}
                 />
               ))}
-              {moreCount > 0 && <MoreCard count={moreCount} />}
+              {moreCount > 0 && <MoreCard count={moreCount} eventId={event.id} />}
             </SimpleGrid>
           )}
         </Box>
+        </Flex>
       </Card.Body>
     </Card.Root>
   );

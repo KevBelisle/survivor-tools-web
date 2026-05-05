@@ -70,7 +70,7 @@ function SourceSelect({
       variant="subtle"
       value={value}
       onValueChange={onValueChange}
-      width="250px"
+      width={{ base: "full", sm: "250px" }}
     >
       <ChakraSelect.HiddenSelect />
       <ChakraSelect.Control>
@@ -191,6 +191,7 @@ function RouteComponent() {
         gap="4"
         bg={{ base: "gray.300", _dark: "gray.700" }}
         mb={8}
+        direction={{ base: "column", sm: "row" }}
       >
         <InputGroup
           flex="1"
